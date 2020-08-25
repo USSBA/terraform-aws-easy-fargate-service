@@ -173,11 +173,11 @@ variable "service_fqdn" {
 }
 variable "alb_log_bucket_name" {
   type        = string
-  description = "Optional; The S3 bucket name to store the ALB logs in. Default is null"
+  description = "Optional; The S3 bucket name to store the ALB access logs in. Default is null."
   default     = null
 }
 variable "alb_log_prefix" {
   type        = string
-  description = "Optional; Prefix for each object created in ALB log bucket. Default is null."
+  description = "Optional; Prefix for each object created in ALB access log bucket. Default is null."
   default     = null
 }
