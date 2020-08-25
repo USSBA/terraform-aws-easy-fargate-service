@@ -171,3 +171,13 @@ variable "service_fqdn" {
   description = "Optional; Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` and `hosted_zone_id` is set."
   default     = null
 }
+variable "alb_log_bucket_name" {
+  type        = string
+  description = "Optional; The S3 bucket name to store the ALB logs in. Default is null"
+  default     = null
+}
+variable "alb_log_prefix" {
+  type        = string
+  description = "Optional; Prefix for each object created in ALB log bucket. Default is null."
+  default     = null
+}

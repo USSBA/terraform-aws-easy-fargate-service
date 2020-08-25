@@ -10,6 +10,9 @@ output "task_execution_role" {
 output "alb_dns" {
   value = aws_lb.alb.dns_name
 }
+output "alb" {
+  value = aws_lb.alb
+}
 output "security_group_id" {
   value = aws_security_group.fargate.id
 }

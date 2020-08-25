@@ -6,9 +6,6 @@ resource "aws_lb_target_group" "alb" {
   vpc_id               = local.vpc_id
   deregistration_delay = 20
 
-  # TODO:
-  # need to make the health_check a bit more configurable
-
   health_check {
     interval            = 30
     path                = var.health_check_path
