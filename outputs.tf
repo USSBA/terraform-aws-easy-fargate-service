@@ -16,3 +16,6 @@ output "alb" {
 output "security_group_id" {
   value = aws_security_group.fargate.id
 }
+output "volumes" {
+  value = var.efs_config != null ? aws_ecs_task_definition.fargate.volume : []
+}
