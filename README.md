@@ -70,7 +70,7 @@ With this module you can deploy an http Fargate service with *just* two(2) varia
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "1.0.0"
+  version            = "~> 2.0"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
 }
@@ -81,7 +81,7 @@ module "my-ez-fargate-service" {
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "1.0.0"
+  version            = "~> 2.0"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
   cluster_name       = "my-ecs-cluster"
@@ -117,6 +117,10 @@ We welcome contributions.
 To contribute please read our [CONTRIBUTING](CONTRIBUTING.md) document.
 
 All contributions are subject to the license and in no way imply compensation for contributions.
+
+### Terraform 0.12
+
+Our code base now exists in Terraform 0.13 and we are halting new features in the Terraform 0.12 major version.  If you wish to make a PR or merge upstream changes back into 0.12, please submit a PR to the `terraform-0.12` branch.
 
 ## Code of Conduct
 
