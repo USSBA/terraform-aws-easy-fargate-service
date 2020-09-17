@@ -1,3 +1,7 @@
+# v2.1.0
+
+- Add `route53_allow_overwrite` option for route53 config
+
 # v2.0.1
 
 - Output aws_ecs_service.fargate
