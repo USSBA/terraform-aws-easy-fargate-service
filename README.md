@@ -59,6 +59,7 @@ Features:
 * `security_group_ids` - A set of additional security group ID's that will associated to the Fargate service network interface. Default is `[]`.
 * `certificate_arn` - A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http.
 * `hosted_zone_id` - The hosted zone ID where the A record will be created. Required if `certificate_arn` and `service_fqdn` is set. Default is `null`.
+* `route53_allow_overwrite` - Set the `allow_overwrite` property of the route53 record.  If `true`, there will be no `terraform import` necessary for pre-existing records. Default is `false`.
 * `service_fqdn` - Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` and `hosted_zone_id` is set. Default is `null`.
 * `alb_log_bucket_name` - The S3 bucket name to store the ALB access logs in. Default is `null`.
 * `alb_log_prefix` - Prefix for each object created in ALB access log bucket. Default is `null`.

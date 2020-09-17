@@ -166,6 +166,11 @@ variable "hosted_zone_id" {
   description = "Optional; The hosted zone ID where the A record will be created. Required if `certificate_arn` and `service_fqdn` is set."
   default     = null
 }
+variable "route53_allow_overwrite" {
+  type        = bool
+  description = "Optional; Set the 'allow_overwrite' property of the route53 record.  Defaults to `false`.  If `true`, there will be no `terraform import` necessary for pre-existing records."
+  default     = false
+}
 variable "service_fqdn" {
   type        = string
   description = "Optional; Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` and `hosted_zone_id` is set."
