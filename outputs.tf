@@ -19,3 +19,7 @@ output "alb" {
 output "security_group_id" {
   value = aws_security_group.fargate.id
 }
+output "cloudfront" {
+  value = try(aws_cloudfront_distribution.distribution[0], null)
+}
+
