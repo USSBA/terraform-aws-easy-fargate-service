@@ -15,3 +15,8 @@ resource "aws_lb" "alb" {
     }
   }
 }
+resource "aws_wafregional_web_acl_association" "alb" {
+  count        = length(var.regional_waf_acl_id) == 0 ? 0 : 1
+  resource_arn = aws_lb.alb.arn
+  web_acl_id   = var.regional_waf_acl_id
+}

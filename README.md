@@ -63,6 +63,14 @@ Features:
 * `service_fqdn` - Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` and `hosted_zone_id` is set. Default is `null`.
 * `alb_log_bucket_name` - The S3 bucket name to store the ALB access logs in. Default is `null`.
 * `alb_log_prefix` - Prefix for each object created in ALB access log bucket. Default is `null`.
+* `use_cloudfront` - When `true` this module will attempt to provision a CF distribution. If a `certificate_arn` is used then both `hosted_zone_id` and `service_fqdn` will be required. Otherwise the default CF certificate is used. Default is `false`
+* `cloudfront_blacklist_geo_restrictions` - A set of alpha-2 country codes. Request orginating from these countries will be blocked and all other will be allowed. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
+* `cloudfront_whitelist_geo_restrictions` - A set of alpha-2 country codes. Request orginating from these countries will be allowed and all other will be blocked. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
+* `cloudfront_origin_custom_headers` - A set of custom headers (name/value pairs) that will be passed to the origin. Typically used to pass a secret header and value to an ALB with a WAF to prevent connections directly to the ALB except when this secret header and value are present.
+* `global_waf_acl_id` - An AWS Global Web Applicaiton Firewall ID that will be attached to the CF distribution. By default no association will be made.
+* `regional_waf_acl_id` - An AWS Regional Web Application Firewall ID that will be attached to the ALB. By default no association will be made.
+* `cloudfront_log_bucket_name` - The S3 bucket name to store the CF access logs in. By default no logs will be stored.
+* `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
 
 ### Simple Example
 

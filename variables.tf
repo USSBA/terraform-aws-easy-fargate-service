@@ -186,3 +186,43 @@ variable "alb_log_prefix" {
   description = "Optional; Prefix for each object created in ALB access log bucket. Default is null."
   default     = null
 }
+variable "use_cloudfront" {
+  type        = bool
+  description = "Optional; Creates a distribution with a default cache behavior. Default is `false`. If `true` and `service_fqdn` along with `hosted_zone_id` then the ALIAS record will point at this distrobution."
+  default     = false
+}
+variable "cloudfront_blacklist_geo_restrictions" {
+  type        = list(string)
+  description = "Optional; List of alpha-2 country codes that will be blocked, all others will be allowed. Cannot be used with `whiltelist_geo_restrictions`."
+  default     = []
+}
+variable "cloudfront_whitelist_geo_restrictions" {
+  type        = list(string)
+  description = "Optional; List of alpha-2 country codes that will be allowed, all others will be blocked. Cannot be used with `blacklist_geo_restrictions`."
+  default     = []
+}
+variable "cloudfront_origin_custom_headers" {
+  type        = list(object({ name = string, value = string }))
+  description = "Optional; A custom set of header name/value pairs passed to the ALB from CloudFront. Typically used to pass a secret header to the ALB wich is validated by the regional WAF at the ALB."
+  default     = []
+}
+variable "global_waf_acl_id" {
+  type        = string
+  description = "Optional; Global Web Application Firewall ID that will be applied to the CloudFront distribution."
+  default     = ""
+}
+variable "regional_waf_acl_id" {
+  type        = string
+  description = "Optional; Regional Web Application Firewall ID that will be applied to the Application Load Balancer."
+  default     = ""
+}
+variable "cloudfront_log_bucket_name" {
+  type        = string
+  description = "Optional: The S3 bucket name in which cloudfront logs will be delivered."
+  default     = ""
+}
+variable "cloudfront_log_prefix" {
+  type        = string
+  description = "Optional; A text prefix prepended to the log file when it is delivered."
+  default     = ""
+}

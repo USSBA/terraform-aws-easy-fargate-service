@@ -4,8 +4,8 @@ resource "aws_route53_record" "dns" {
   name    = var.service_fqdn
   type    = "A"
   alias {
-    name                   = aws_lb.alb.dns_name
-    zone_id                = aws_lb.alb.zone_id
+    name                   = var.use_cloudfront ? aws_cloudfront_distribution.distribution[0].domain_name : aws_lb.alb.dns_name
+    zone_id                = var.use_cloudfront ? aws_cloudfront_distribution.distribution[0].hosted_zone_id : aws_lb.alb.zone_id
     evaluate_target_health = false
   }
   allow_overwrite = var.route53_allow_overwrite
