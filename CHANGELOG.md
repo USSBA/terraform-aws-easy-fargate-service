@@ -1,3 +1,7 @@
+# v2.2.0
+
+- Added support for optional CloudFront distributon
+
 # v2.1.0
 
 - Add `route53_allow_overwrite` option for route53 config
