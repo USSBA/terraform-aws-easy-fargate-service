@@ -6,9 +6,10 @@ Features:
 
 * Sane Defaults
 * Load balanced out of the box
+* Can optionally provision a CloudFront distribution for your application
 * Configurable scaling
 * Looks up Default VPC/Subnets/etc unless told otherwise
-* Supports EFS
+* Supports EFS and WAF
 
 ## Usage
 
@@ -16,7 +17,7 @@ Features:
 
 * VPC and ECS Cluster (AWS default will do!)
 * A docker image
-* An ACM cert (only a prerequistie if you want to run the service over HTTPS)
+* An ACM cert (only a prerequisite if you want to run the service over HTTPS)
 
 ### Variables
 
@@ -74,23 +75,27 @@ Features:
 
 ### Simple Example
 
-With this module you can deploy an http Fargate service with *just* two(2) variables. Yeah you heard that right, TWO VARIABLES. But be warned, this is as basic as it gets. The following example deploys a docker image on port 80 on the AWS default vpc. Be warned that the container is publically accessible to the internet, so **use this method with caution!** We can't advise it but we can't help but emphasize the **easy** in `easy-fargate-service`.
+With this module you can deploy an http Fargate service with *just* two(2) variables. Yeah you heard that right, TWO VARIABLES. But be warned, this is as basic as it gets. Be warned that the container is publically accessible to the internet, so **use this method with caution!** We can't advise it but we can't help but emphasize the **easy** in `easy-fargate-service`.
+
+The following example deploys a single container Fargate service on port 80 on the AWS default vpc:
 
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "~> 2.0"
+  version            = "~> 2.2"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
 }
 ```
 
-### A Realistic Example
+### Realistic Example
+
+An example with multiple containers, scaling configured, environment variables, and secrets sitting behind a CloudFront distribution:
 
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "~> 2.0"
+  version            = "~> 2.2"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
   cluster_name       = "my-ecs-cluster"
@@ -105,6 +110,7 @@ module "my-ez-fargate-service" {
   certificate_arn    = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-90ab-cdef-1234-567890abcdef"
   hosted_zone_id     = "Z000000000000"
   service_fqdn       = "www.cheeseburger.com"
+  use_cloudfront     = true
   container_environment = [
     {
       name  = "FOO"
