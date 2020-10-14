@@ -1,18 +1,25 @@
-# v2.2.0
+# Changelog
 
-- Added support for optional CloudFront distributon
+## v2.2.1
 
-# v2.1.0
+* Updated documentation for clarity and ease of use, added code validation to CircleCI config, and MD linter to precommit config
 
-- Add `route53_allow_overwrite` option for route53 config
+## v2.2.0
 
-# v2.0.1
+* Added support for optional CloudFront distributon
 
-- Output aws_ecs_service.fargate
-# v2.0.0
+## v2.1.0
 
-- **Terraform 13**
+* Add `route53_allow_overwrite` option for route53 config
 
-# v1.0.0
+## v2.0.1
 
-- Initial Release
+* Output aws_ecs_service.fargate
+
+## v2.0.0
+
+* **Terraform 13**
+
+## v1.0.0
+
+* Initial Release
