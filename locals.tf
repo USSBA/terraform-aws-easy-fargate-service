@@ -15,6 +15,6 @@ data "aws_subnet_ids" "default" {
 locals {
   region              = data.aws_region.current.name
   account_id          = data.aws_caller_identity.current.account_id
-  subnet_ids_provided = var.private_subnet_ids != null && var.public_subnet_ids != null
-  vpc_id              = var.vpc_id != null ? var.vpc_id : data.aws_vpc.default[0].id
+  subnet_ids_provided = length(var.private_subnet_ids) > 0 && length(var.public_subnet_ids) > 0
+  vpc_id              = var.vpc_id != "" ? var.vpc_id : data.aws_vpc.default[0].id
 }
