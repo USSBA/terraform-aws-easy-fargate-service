@@ -36,12 +36,12 @@ variable "min_capacity" {
 }
 variable "scaling_metric" {
   type        = string
-  description = "Optional; A type of target scaling. Needs to be either 'cpu' or 'memory'."
+  description = "Optional; A type of target scaling. Needs to be either 'cpu' or 'memory'. Default is no scaling."
   default     = ""
 }
 variable "scaling_threshold" {
   type        = number
-  description = "Optional; The percentage in which the scaling metric will trigger a scaling event."
+  description = "Optional; The percentage in which the scaling metric will trigger a scaling event. Default is no scaling."
   default     = -1
 }
 variable "efs_config" {
@@ -126,7 +126,7 @@ variable "command_override" {
 }
 variable "task_policy_json" {
   type        = string
-  description = "Optional; A JSON formated IAM policy providing the running container with permissions."
+  description = "Optional; A JSON formated IAM policy providing the running container with permissions.  By default, no permissions granted."
   default     = ""
 }
 
@@ -163,7 +163,7 @@ variable "certificate_arn" {
 }
 variable "hosted_zone_id" {
   type        = string
-  description = "Optional; The hosted zone ID where the A record will be created. Required if `certificate_arn` and `service_fqdn` is set."
+  description = "Optional; The hosted zone ID where the A record will be created. Required if `certificate_arn` is set."
   default     = ""
 }
 variable "route53_allow_overwrite" {
@@ -173,7 +173,7 @@ variable "route53_allow_overwrite" {
 }
 variable "service_fqdn" {
   type        = string
-  description = "Optional; Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` and `hosted_zone_id` is set."
+  description = "Optional; Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` is set."
   default     = ""
 }
 variable "alb_log_bucket_name" {
