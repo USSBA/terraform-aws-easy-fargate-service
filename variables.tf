@@ -27,22 +27,22 @@ variable "desired_capacity" {
 variable "max_capacity" {
   type        = number
   description = "Optional; The maximum number of containers running in the service. Default is same as `desired_capacity`."
-  default     = null
+  default     = -1
 }
 variable "min_capacity" {
   type        = number
   description = "Optional; The minimum number of containers running in the service. Default is same as `desired_capacity`."
-  default     = null
+  default     = -1
 }
 variable "scaling_metric" {
   type        = string
-  description = "Optional; A type of target scaling. Needs to be either cpu or memory. Default is null."
-  default     = null
+  description = "Optional; A type of target scaling. Needs to be either 'cpu' or 'memory'."
+  default     = ""
 }
 variable "scaling_threshold" {
   type        = number
-  description = "Optional; The percentage in which the scaling metric will trigger a scaling event. Default is null."
-  default     = null
+  description = "Optional; The percentage in which the scaling metric will trigger a scaling event."
+  default     = -1
 }
 variable "efs_config" {
   type = object({
@@ -56,7 +56,7 @@ variable "efs_config" {
 variable "log_group_name" {
   type        = string
   description = "Optional; The name of the log group. By default the `family` variable will be used."
-  default     = null
+  default     = ""
 }
 variable "log_group_stream_prefix" {
   type        = string
@@ -71,7 +71,7 @@ variable "log_group_retention_in_days" {
 variable "log_group_region" {
   type        = string
   description = "Optional; The region where the log group exists. By default the current region will be used."
-  default     = null
+  default     = ""
 }
 variable "task_cpu" {
   type        = number
@@ -117,17 +117,17 @@ variable "platform_version" {
 variable "entrypoint_override" {
   type        = list(string)
   description = "Optional; Your Docker entrypoint command. Default is the `ENTRYPOINT` directive from the Docker image."
-  default     = null
+  default     = []
 }
 variable "command_override" {
   type        = list(string)
   description = "Optional; Your Docker command. Default is the `CMD` directive from the Docker image."
-  default     = null
+  default     = []
 }
 variable "task_policy_json" {
   type        = string
   description = "Optional; A JSON formated IAM policy providing the running container with permissions."
-  default     = null
+  default     = ""
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -139,17 +139,17 @@ variable "task_policy_json" {
 variable "vpc_id" {
   type        = string
   description = "Optional; The VPC Id in which resources will be provisioned. Default is the default AWS vpc."
-  default     = null
+  default     = ""
 }
 variable "private_subnet_ids" {
   type        = list(string)
   description = "Optional; A set of subnet ID's that will be associated with the Farage service. By default the module will use the default vpc's public subnets."
-  default     = null
+  default     = []
 }
 variable "public_subnet_ids" {
   type        = list(string)
   description = "Optional; A set of subnet ID's that will be associated with the Application Load-balancer. By default the module will use the default vpc's public subnets."
-  default     = null
+  default     = []
 }
 variable "security_group_ids" {
   type        = list(string)
@@ -159,12 +159,12 @@ variable "security_group_ids" {
 variable "certificate_arn" {
   type        = string
   description = "Optional; A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http."
-  default     = null
+  default     = ""
 }
 variable "hosted_zone_id" {
   type        = string
   description = "Optional; The hosted zone ID where the A record will be created. Required if `certificate_arn` and `service_fqdn` is set."
-  default     = null
+  default     = ""
 }
 variable "route53_allow_overwrite" {
   type        = bool
@@ -174,17 +174,17 @@ variable "route53_allow_overwrite" {
 variable "service_fqdn" {
   type        = string
   description = "Optional; Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` and `hosted_zone_id` is set."
-  default     = null
+  default     = ""
 }
 variable "alb_log_bucket_name" {
   type        = string
-  description = "Optional; The S3 bucket name to store the ALB access logs in. Default is null."
-  default     = null
+  description = "Optional; The S3 bucket name to store the ALB access logs in."
+  default     = ""
 }
 variable "alb_log_prefix" {
   type        = string
-  description = "Optional; Prefix for each object created in ALB access log bucket. Default is null."
-  default     = null
+  description = "Optional; Prefix for each object created in ALB access log bucket."
+  default     = ""
 }
 variable "use_cloudfront" {
   type        = bool

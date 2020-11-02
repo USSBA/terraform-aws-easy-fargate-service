@@ -1,6 +1,6 @@
 resource "aws_cloudfront_distribution" "distribution" {
   count           = var.use_cloudfront ? 1 : 0
-  aliases         = var.service_fqdn == null ? [] : [var.service_fqdn]
+  aliases         = var.service_fqdn == "" ? [] : [var.service_fqdn]
   comment         = var.family
   enabled         = true
   is_ipv6_enabled = true
@@ -47,8 +47,8 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
   viewer_certificate {
     acm_certificate_arn            = var.certificate_arn
-    cloudfront_default_certificate = var.certificate_arn == null
-    minimum_protocol_version       = var.certificate_arn == null ? "TLSv1" : "TLSv1.2_2019"
+    cloudfront_default_certificate = var.certificate_arn == ""
+    minimum_protocol_version       = var.certificate_arn == "" ? "TLSv1" : "TLSv1.2_2019"
     ssl_support_method             = "sni-only"
   }
 }

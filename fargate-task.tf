@@ -10,13 +10,13 @@ resource "aws_ecs_task_definition" "fargate" {
         memory      = var.task_memory
         secrets     = var.container_secrets
         environment = var.container_environment
-        entryPoint  = var.entrypoint_override
-        command     = var.command_override
+        entryPoint  = length(var.entrypoint_override) > 0 ? var.entrypoint_override : null
+        command     = length(var.command_override) > 0 ? var.command_override : null
         logConfiguration = {
           logDriver = "awslogs"
           options = {
             awslogs-group         = aws_cloudwatch_log_group.fargate.name
-            awslogs-region        = var.log_group_region != null ? var.log_group_region : local.region
+            awslogs-region        = var.log_group_region != "" ? var.log_group_region : local.region
             awslogs-stream-prefix = var.log_group_stream_prefix
           }
         }

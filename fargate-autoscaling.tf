@@ -2,15 +2,15 @@ resource "aws_appautoscaling_target" "ecs_target" {
   depends_on = [
     aws_ecs_service.fargate
   ]
-  max_capacity       = var.max_capacity != null ? var.max_capacity : var.desired_capacity
-  min_capacity       = var.min_capacity != null ? var.min_capacity : var.desired_capacity
+  max_capacity       = var.max_capacity >= 0 ? var.max_capacity : var.desired_capacity
+  min_capacity       = var.min_capacity >= 0 ? var.min_capacity : var.desired_capacity
   resource_id        = "service/${var.cluster_name}/${var.family}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }
 
 resource "aws_appautoscaling_policy" "ecs_policy" {
-  count = var.scaling_metric != null && var.scaling_threshold != null ? 1 : 0
+  count = var.scaling_metric != "" && var.scaling_threshold >= 0 ? 1 : 0
   depends_on = [
     aws_ecs_service.fargate
   ]

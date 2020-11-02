@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.0
+
+* Switching 'no-value' from null to empty string, empty list, or negative number to prevent Terraform Registry from showing optional variables as requred
+
 ## v2.2.1
 
 * Updated documentation for clarity and ease of use, added code validation to CircleCI config, and MD linter to precommit config
