@@ -34,8 +34,8 @@ Features:
 * `desired_capacity` - The desired number of containers running in the service. Default is `1`.
 * `max_capacity` - The maximum number of containers running in the service. Default is same as `desired_capacity`.
 * `min_capacity` - The minimum number of containers running in the service. Default is same as `desired_capacity`.
-* `scaling_metric` - A type of target scaling. Needs to be either `cpu` or `memory`.
-* `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event.
+* `scaling_metric` - A type of target scaling. Needs to be either `cpu` or `memory`. Default is no scaling.
+* `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event. Default is no scaling.
 * `efs_config` - The EFS id, root directory, and path. The module currently supports only one mount.
 * `log_group_name` - The name of the log group. By default the `family` variable will be used.
 * `log_group_stream_prefix` - The name of the log group stream prefix. By default this will be `container`.
@@ -50,7 +50,7 @@ Features:
 * `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
 * `entrypoint_override` - Your Docker entrypoint command. Default is the `ENTRYPOINT` directive from the Docker image.
 * `command_override` - Your Docker command. Default is the `CMD` directive from the Docker image.
-* `task_policy_json` - A JSON formated IAM policy providing the running container with permissions.
+* `task_policy_json` - A JSON formated IAM policy providing the running container with permissions.  By default, no permissions granted.
 
 ##### Network and Routing Configuration
 
@@ -59,9 +59,9 @@ Features:
 * `public_subnet_ids` - A set of subnet ID's that will be associated with the Application Load-balancer. By default the module will use the default vpc's public subnets.
 * `security_group_ids` - A set of additional security group ID's that will associated to the Fargate service network interface. Default is `[]`.
 * `certificate_arn` - A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http.
-* `hosted_zone_id` - The hosted zone ID where the A record will be created. Required if `certificate_arn` and `service_fqdn` is set.
+* `hosted_zone_id` - The hosted zone ID where the A record will be created. Required if `certificate_arn` is set.
+* `service_fqdn` - Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` is set.
 * `route53_allow_overwrite` - Set the `allow_overwrite` property of the route53 record.  If `true`, there will be no `terraform import` necessary for pre-existing records. Default is `false`.
-* `service_fqdn` - Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` and `hosted_zone_id` is set.
 * `alb_log_bucket_name` - The S3 bucket name to store the ALB access logs in.
 * `alb_log_prefix` - Prefix for each object created in ALB access log bucket.
 * `use_cloudfront` - When `true` this module will attempt to provision a CF distribution. If a `certificate_arn` is used then both `hosted_zone_id` and `service_fqdn` will be required. Otherwise the default CF certificate is used. Default is `false`
