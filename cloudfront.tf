@@ -8,8 +8,8 @@ resource "aws_cloudfront_distribution" "distribution" {
   web_acl_id      = length(var.global_waf_acl_id) == 0 ? null : var.global_waf_acl_id
   restrictions {
     geo_restriction {
-      restriction_type = length(var.cloudfront_whitelist_geo_restrictions) == 0 ? "blacklist" : "whitelist"
-      locations        = length(var.cloudfront_whitelist_geo_restrictions) == 0 ? var.cloudfront_blacklist_geo_restrictions : var.cloudfront_whitelist_geo_restrictions
+      restriction_type = length(var.cloudfront_whitelist_geo_restrictions) > 0 ? "whitelist" : length(var.cloudfront_blacklist_geo_restrictions) > 0 ? "blacklist" : "none"
+      locations        = length(var.cloudfront_whitelist_geo_restrictions) > 0 ? var.cloudfront_whitelist_geo_restrictions : length(var.cloudfront_blacklist_geo_restrictions) > 0 ? var.cloudfront_blacklist_geo_restrictions : null
     }
   }
   dynamic "logging_config" {
@@ -23,6 +23,12 @@ resource "aws_cloudfront_distribution" "distribution" {
   origin {
     domain_name = aws_lb.alb.dns_name
     origin_id   = var.family
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
     dynamic "custom_header" {
       iterator = header
       for_each = var.cloudfront_origin_custom_headers
@@ -41,7 +47,7 @@ resource "aws_cloudfront_distribution" "distribution" {
       cookies {
         forward = "all"
       }
-      headers      = []
+      headers      = ["Host"]
       query_string = true
     }
   }
