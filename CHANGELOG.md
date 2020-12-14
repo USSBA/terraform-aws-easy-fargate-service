@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.3.1
+
+* **BUGFIX** CloudFront origin config was broken
+* **BUGFIX** CloudFront geo_restriction config was broken with no restrictions
+
 ## v2.3.0
 
 * Switching 'no-value' from null to empty string, empty list, or negative number to prevent Terraform Registry from showing optional variables as requred
