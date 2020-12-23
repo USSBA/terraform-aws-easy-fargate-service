@@ -20,13 +20,7 @@ resource "aws_ecs_task_definition" "fargate" {
             awslogs-stream-prefix = var.log_group_stream_prefix
           }
         }
-        mountPoints = (var.efs_config != null ? [
-          {
-            readOnly      = false
-            containerPath = var.efs_config.container_path
-            sourceVolume  = "efs-mount"
-          }
-        ] : [])
+        mountPoints  = local.efs_mountpoints
         portMappings = [{ containerPort = var.container_port }]
       }
   ])
@@ -38,14 +32,29 @@ resource "aws_ecs_task_definition" "fargate" {
   requires_compatibilities = ["FARGATE"]
 
   dynamic "volume" {
-    for_each = var.efs_config != null ? ["enabled"] : []
+    iterator = volume
+    for_each = local.efs_volumes
     content {
-      name = "efs-mount"
+      name = volume.value.vol_id
       efs_volume_configuration {
-        file_system_id     = var.efs_config.file_system_id
-        root_directory     = var.efs_config.root_directory
+        file_system_id     = volume.value.file_system_id
+        root_directory     = volume.value.root_directory
         transit_encryption = "ENABLED"
       }
     }
   }
+}
+
+locals {
+  efs_configs = flatten(concat(var.efs_config != null ? [var.efs_config] : [], var.efs_configs))
+  efs_volumes = distinct([for config in local.efs_configs : {
+    vol_id         = md5("${config.file_system_id}-${config.root_directory}")
+    file_system_id = config.file_system_id
+    root_directory = config.root_directory
+  }])
+  efs_mountpoints = [for config in local.efs_configs : {
+    containerPath = config.container_path
+    sourceVolume  = md5("${config.file_system_id}-${config.root_directory}")
+    readOnly      = false
+  }]
 }
