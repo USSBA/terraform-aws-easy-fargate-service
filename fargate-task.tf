@@ -52,7 +52,7 @@ locals {
   # Craft the efs_volumes config.  We need one element per "fs_id + directory", and
   # a volume ID that can be referenced from the mountpoints config below
   efs_volumes = distinct([for config in local.efs_configs : {
-    vol_id         = md5("${config.file_system_id}-${config.root_directory}")
+    vol_id         = "${config.file_system_id}-${md5(config.root_directory)}"
     file_system_id = config.file_system_id
     root_directory = config.root_directory
   }])
@@ -61,7 +61,7 @@ locals {
   # the container, referencing a volume ID from the volume config above
   efs_mountpoints = [for config in local.efs_configs : {
     containerPath = config.container_path
-    sourceVolume  = md5("${config.file_system_id}-${config.root_directory}")
+    sourceVolume  = "${config.file_system_id}-${md5(config.root_directory)}"
     readOnly      = false
   }]
 }
