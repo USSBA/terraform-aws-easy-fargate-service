@@ -36,7 +36,8 @@ Features:
 * `min_capacity` - The minimum number of containers running in the service. Default is same as `desired_capacity`.
 * `scaling_metric` - A type of target scaling. Needs to be either `cpu` or `memory`. Default is no scaling.
 * `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event. Default is no scaling.
-* `efs_config` - The EFS id, root directory, and path. The module currently supports only one mount.
+* `efs_config` - The EFS id, root directory, and path. The module currently supports only one mount. DEPRECATED, use efs_configs instead
+* `efs_configs` - Optional; List of {file_system_id, root_directory, container_path} EFS mounts.
 * `log_group_name` - The name of the log group. By default the `family` variable will be used.
 * `log_group_stream_prefix` - The name of the log group stream prefix. By default this will be `container`.
 * `log_group_retention_in_days` - The number of days to retain the log group. By default logs will never expire.
