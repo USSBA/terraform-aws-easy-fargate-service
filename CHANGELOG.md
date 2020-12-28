@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.0
+
+* **BREAKING CHANGE:** Container configuration now happens through the `container_definitions` map.
+
 ## v2.4.0
 
 * Adding `efs_configs` to allow multiple EFS mounts.  `efs_config` will function the same as before, but is considered deprecated.

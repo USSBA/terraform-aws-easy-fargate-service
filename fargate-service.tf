@@ -20,7 +20,7 @@ resource "aws_ecs_service" "fargate" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.alb.arn
-    container_name   = var.family
+    container_name   = local.container_definitions_with_defaults[0].name
     container_port   = var.container_port
   }
 
