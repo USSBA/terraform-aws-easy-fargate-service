@@ -1,20 +1,3 @@
-resource "aws_efs_file_system" "efs-one" {
-  creation_token = "my-efs-one"
-
-  tags = {
-    Name = "my-efs-one"
-  }
-}
-
-resource "aws_efs_file_system" "efs-two" {
-  creation_token = "my-efs-two"
-
-  tags = {
-    Name = "my-efs-two"
-  }
-}
-
-
 module "my-ez-fargate-efs" {
   #source             = "USSBA/easy-fargate-service/aws"
   #version            = "~> 2.2"
@@ -49,4 +32,14 @@ module "my-ez-fargate-efs" {
       container_path = "/mnt/two"
     },
   ]
+}
+
+# Allow Fargate task into EFS
+resource "aws_security_group_rule" "allow_fargate_into_efs" {
+  type                     = "ingress"
+  from_port                = 2049
+  to_port                  = 2049
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.efs.id
+  source_security_group_id = module.my-ez-fargate-efs.security_group_id
 }
