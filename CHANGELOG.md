@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.4.0
+
+* Adding `efs_configs` to allow multiple EFS mounts.  `efs_config` will function the same as before, but is considered deprecated.
+  * Note, this will trigger a new Task Definition to be created due to a change in the way volumes/mounts are named
+
 ## v2.3.1
 
 * **BUGFIX** CloudFront origin config was broken

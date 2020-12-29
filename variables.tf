@@ -50,8 +50,17 @@ variable "efs_config" {
     root_directory = string
     container_path = string
   })
-  description = "Optional; The EFS id, root directory, and path. The module currently supports only one mount."
+  description = "Optional; Single EFS mount of {file_system_id, root_directory, container_path}. DEPRECATED, use efs_configs instead"
   default     = null
+}
+variable "efs_configs" {
+  type = list(object({
+    file_system_id = string
+    root_directory = string
+    container_path = string
+  }))
+  description = "Optional; List of {file_system_id, root_directory, container_path} EFS mounts."
+  default     = []
 }
 variable "log_group_name" {
   type        = string
