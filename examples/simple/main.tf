@@ -9,6 +9,12 @@ module "my-ez-fargate-service" {
       image = "nginx:latest"
     },
   ]
+  #environment = [
+  #  {
+  #    name = "foo"
+  #    value = "bar"
+  #  },
+  #]
 }
 output "alb_dns" {
   value = module.my-ez-fargate-service.alb_dns

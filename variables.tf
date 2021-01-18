@@ -55,11 +55,6 @@ variable "log_group_name" {
   description = "Optional; The name of the log group. By default the `family` variable will be used."
   default     = ""
 }
-variable "container_name" {
-  type        = string
-  description = "Optional; By default this will be `container`; doubles as a log_group_prefix"
-  default     = "container"
-}
 variable "log_group_retention_in_days" {
   type        = number
   description = "Optional; The number of days to retain the log group. By default logs will never expire."
@@ -80,27 +75,6 @@ variable "task_memory" {
   description = "Optional; A fargate compliant container memory value."
   default     = 512
 }
-#variable "container_environment" {
-#  type = list(object({
-#    name  = string
-#    value = string
-#  }))
-#  description = "Optional; Environment variables to be passed in to the container."
-#  default     = []
-#}
-#variable "container_secrets" {
-#  "foo": {
-#    [
-#      {name: mySecret, valueFrom: parametersotre/mySecretProd}
-#    ]
-#  }
-#  type = list(object({
-#    name      = string
-#    valueFrom = string
-#  }))
-#  description = "Optional; ECS Task Secrets to be passed in to the container and have permissions granted to read."
-#  default     = []
-#}
 variable "container_port" {
   type        = number
   description = "Optional; the port the container listens on."

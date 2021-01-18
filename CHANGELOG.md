@@ -2,7 +2,16 @@
 
 ## v3.0.0
 
-* **BREAKING CHANGE:** Container configuration now happens through the `container_definitions` map.
+* **BREAKING CHANGE:** `container_definition` has been DEPRICATES, use `container_definitions` map instead.
+* **BREAKING CHANGE:** `efs_config` has been DEPRICATED, use `efs_configs` map instead.
+* **BREAKING CHANGE:** `container_secrets` has been DEPRICATED, use `container_definitions[].secrets` map instead
+* **BREAKING CHANGE:** `container_name` has been DEPRICATED, use `container_definitions[].name` instead.
+* **BREAKING CHANGE:** `container_image` has been DEPRICATED, use `container_definitions[].image` instead.
+* **BREAKING CHANGE:** `container_environment` has been DEPRICATED, use `container_definitions[].environment` instead.
+* **BREAKING CHANGE:** `entrypoint_override` has been DEPRICATED, use `container_definitions[].entryPoint` instead.
+* **BREAKING CHANGE:** `command_override` has been DEPRICATED, use `container_definitions[].command` instead.
+* **FUNCTIONAL CHANGE:** `task_cpu` will now be divided evenly across containers unless explictly set by the container definition(s).
+* **FUNCTIONAL CHANGE:** `task_memory` will now be divided evenly across containers unless explictly set by the container definition(s).
 
 ## v2.4.0
 
