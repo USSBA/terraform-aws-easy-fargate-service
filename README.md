@@ -10,6 +10,7 @@ Features:
 * Configurable scaling
 * Looks up Default VPC/Subnets/etc unless told otherwise
 * Supports EFS and WAF
+* Supports multiple containers
 
 ## Usage
 
@@ -24,7 +25,7 @@ Features:
 #### Required
 
 * `family` - A unique name for the service family; Also used for naming various resources.
-* `container_definitions` - List of {name, image} at minimal. See [documentation](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) for more complex configurations.
+* `container_definitions` - List of `{name, image}` at minimum.  If using more than 1 container, must also define `portMappings = [{ containerPort = <port> }]` on the container to be reached by the load balancer.  See [AWS documentation](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) for more the complete list of settings.  See [the examples directory](./examples) for different implementation examples.
 
 #### Optional
 
@@ -69,6 +70,12 @@ Features:
 * `cloudfront_log_bucket_name` - The S3 bucket name to store the CF access logs in. By default no logs will be stored.
 * `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
 
+## Examples
+
+### Working examples
+
+See the [examples directory](./examples) for some working terraform examples using different features
+
 ### Simple Example
 
 With this module you can deploy an http Fargate service with *just* two(2) variables. Yeah you heard that right, TWO VARIABLES. But be warned, this is as basic as it gets. Be warned that the container is publically accessible to the internet, so **use this method with caution!** We can't advise it but we can't help but emphasize the **easy** in `easy-fargate-service`.
@@ -78,7 +85,7 @@ The following example deploys a single container Fargate service on port 80 on t
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "~> 2.2"
+  version            = "~> 3.0"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
 }
@@ -91,7 +98,7 @@ An example with multiple containers, scaling configured, environment variables, 
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "~> 2.2"
+  version            = "~> 3.0"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
   cluster_name       = "my-ecs-cluster"
