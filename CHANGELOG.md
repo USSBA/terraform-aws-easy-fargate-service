@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.0.0
+
+* **BREAKING CHANGES:**
+  * `container_definition` has been REMOVED, use `container_definitions` list of maps instead.
+  * `efs_config` has been REMOVED, use `efs_configs` list of maps instead.
+  * `container_secrets` has been REMOVED, use `container_definitions[].secrets` map instead
+  * `container_name` has been REMOVED, use `container_definitions[].name` instead.
+  * `container_image` has been REMOVED, use `container_definitions[].image` instead.
+  * `container_environment` has been REMOVED, use `container_definitions[].environment` instead.
+  * `entrypoint_override` has been REMOVED, use `container_definitions[].entryPoint` instead.
+  * `command_override` has been REMOVED, use `container_definitions[].command` instead.
+* `task_cpu` will now be divided evenly across containers unless explictly set by the container definition(s).
+* `task_memory` will now be divided evenly across containers unless explictly set by the container definition(s).
+
 ## v2.4.0
 
 * Adding `efs_configs` to allow multiple EFS mounts.  `efs_config` will function the same as before, but is considered deprecated.

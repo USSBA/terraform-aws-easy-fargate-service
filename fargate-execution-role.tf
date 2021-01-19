@@ -8,6 +8,9 @@ data "aws_iam_policy_document" "ecs_execution_principal" {
     }
   }
 }
+locals {
+  extracted_container_secrets = flatten([for c in local.container_definitions : try(c.secrets, [])])
+}
 data "aws_iam_policy_document" "ecs_execution" {
   statement {
     sid    = "ServiceDefaults"
@@ -22,10 +25,10 @@ data "aws_iam_policy_document" "ecs_execution" {
     ]
     resources = ["*"]
   }
-  # If secrets have been provided then an extra statement block will be created
+  # If secrets have been provided with the container defs, then an extra statement block will be created
   # that will allow the exec to pull those secrets and inject them into the container runtime.
   dynamic "statement" {
-    for_each = length(var.container_secrets) > 0 ? ["enabled"] : []
+    for_each = length(local.extracted_container_secrets) > 0 ? ["enabled"] : []
     content {
       sid    = "ServiceSecrets"
       effect = "Allow"
@@ -34,7 +37,7 @@ data "aws_iam_policy_document" "ecs_execution" {
         "ssm:GetParameters",
         "secretsmanager:GetSecretValue",
       ]
-      resources = var.container_secrets.*.valueFrom
+      resources = local.extracted_container_secrets.*.valueFrom
     }
   }
 }

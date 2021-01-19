@@ -8,10 +8,6 @@ variable "family" {
   type        = string
   description = "Required; A unique name for the service family; Also used for naming various resources."
 }
-variable "container_image" {
-  type        = string
-  description = "Required; A fully qualified docker image repository name and tag."
-}
 
 ## Optional
 variable "cluster_name" {
@@ -44,33 +40,20 @@ variable "scaling_threshold" {
   description = "Optional; The percentage in which the scaling metric will trigger a scaling event. Default is no scaling."
   default     = -1
 }
-variable "efs_config" {
-  type = object({
-    file_system_id = string
-    root_directory = string
-    container_path = string
-  })
-  description = "Optional; Single EFS mount of {file_system_id, root_directory, container_path}. DEPRECATED, use efs_configs instead"
-  default     = null
-}
 variable "efs_configs" {
   type = list(object({
+    container_name = string
     file_system_id = string
     root_directory = string
     container_path = string
   }))
-  description = "Optional; List of {file_system_id, root_directory, container_path} EFS mounts."
+  description = "Optional; List of {container_name, file_system_id, root_directory, container_path} EFS mounts."
   default     = []
 }
 variable "log_group_name" {
   type        = string
   description = "Optional; The name of the log group. By default the `family` variable will be used."
   default     = ""
-}
-variable "log_group_stream_prefix" {
-  type        = string
-  description = "Optional; The name of the log group stream prefix. By default this will be `container`."
-  default     = "container"
 }
 variable "log_group_retention_in_days" {
   type        = number
@@ -92,22 +75,6 @@ variable "task_memory" {
   description = "Optional; A fargate compliant container memory value."
   default     = 512
 }
-variable "container_environment" {
-  type = list(object({
-    name  = string
-    value = string
-  }))
-  description = "Optional; Environment variables to be passed in to the container."
-  default     = []
-}
-variable "container_secrets" {
-  type = list(object({
-    name      = string
-    valueFrom = string
-  }))
-  description = "Optional; ECS Task Secrets to be passed in to the container and have permissions granted to read."
-  default     = []
-}
 variable "container_port" {
   type        = number
   description = "Optional; the port the container listens on."
@@ -122,16 +89,6 @@ variable "platform_version" {
   type        = string
   description = "Optional; The ECS backend platform version; Defaults to 1.4.0 so EFS is supported."
   default     = "1.4.0"
-}
-variable "entrypoint_override" {
-  type        = list(string)
-  description = "Optional; Your Docker entrypoint command. Default is the `ENTRYPOINT` directive from the Docker image."
-  default     = []
-}
-variable "command_override" {
-  type        = list(string)
-  description = "Optional; Your Docker command. Default is the `CMD` directive from the Docker image."
-  default     = []
 }
 variable "task_policy_json" {
   type        = string
@@ -234,4 +191,29 @@ variable "cloudfront_log_prefix" {
   type        = string
   description = "Optional; A text prefix prepended to the log file when it is delivered."
   default     = ""
+}
+
+variable "container_definitions" {
+  #type        = any
+  description = "Container configuration in the form of a json-encoded list of maps. Required sub-fields are: 'name', 'image'; the rest will attempt to use sane defaults or can be overridden.  logConfiguration and mountPoints will be injected and overriden by other variables/resources, and the first "
+  validation {
+    condition     = can(var.container_definitions.*.name)
+    error_message = "VALIDATION FAILURE: Every element of container_definitions must include a 'name' field."
+  }
+  validation {
+    condition     = can(var.container_definitions.*.image)
+    error_message = "VALIDATION FAILURE: Every element of container_definitions must include an 'image' field."
+  }
+  validation {
+    condition     = can(var.container_definitions[0])
+    error_message = "VALIDATION FAILURE: Variable container_definitions must be a list."
+  }
+  validation {
+    condition     = can(var.container_definitions[0])
+    error_message = "VALIDATION FAILURE: Variable container_definitions must be a list."
+  }
+  validation {
+    error_message = "VALIDATION FAILURE: Variable container_definitions.*.portMappings must all be unique."
+    condition     = length(distinct([for def in var.container_definitions : def.portMappings[0].containerPort if can(def.portMappings[0].containerPort)])) == length([for def in var.container_definitions : def.portMappings[0].containerPort if can(def.portMappings[0].containerPort)])
+  }
 }

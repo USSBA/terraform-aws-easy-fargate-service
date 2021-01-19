@@ -10,6 +10,7 @@ Features:
 * Configurable scaling
 * Looks up Default VPC/Subnets/etc unless told otherwise
 * Supports EFS and WAF
+* Supports multiple containers
 
 ## Usage
 
@@ -24,7 +25,7 @@ Features:
 #### Required
 
 * `family` - A unique name for the service family; Also used for naming various resources.
-* `container_image` - A fully qualified Docker image repository name and tag. E.g. `nginx:latest`.
+* `container_definitions` - List of `{name, image}` at minimum.  If using more than 1 container, must also define `portMappings = [{ containerPort = <port> }]` on the container to be reached by the load balancer.  See [AWS documentation](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) for more the complete list of settings.  See [the examples directory](./examples) for different implementation examples.
 
 #### Optional
 
@@ -36,21 +37,16 @@ Features:
 * `min_capacity` - The minimum number of containers running in the service. Default is same as `desired_capacity`.
 * `scaling_metric` - A type of target scaling. Needs to be either `cpu` or `memory`. Default is no scaling.
 * `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event. Default is no scaling.
-* `efs_config` - The EFS id, root directory, and path. The module currently supports only one mount. DEPRECATED, use efs_configs instead
-* `efs_configs` - Optional; List of {file_system_id, root_directory, container_path} EFS mounts.
+* `efs_configs` - Optional; List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
 * `log_group_name` - The name of the log group. By default the `family` variable will be used.
 * `log_group_stream_prefix` - The name of the log group stream prefix. By default this will be `container`.
 * `log_group_retention_in_days` - The number of days to retain the log group. By default logs will never expire.
 * `log_group_region` - The region where the log group exists. By default the current region will be used.
 * `task_cpu` - How much CPU should be reserved for the container (in aws cpu-units). Default is `256`.
 * `task_memory` - How much Memory should be reserved for the container (in MB). Default is `512`.
-* `container_environment` - Environment variables to be passed in to the container. Default is `[]`.
-* `container_secrets` - ECS Task Secrets to be passed in to the container and have permissions granted to read. Default is `[]`.
-* `container_port` - The port the container listens on. Default is `80`.
+* `container_port` - Port the container listens on. Default is `80` (only valid with single container configurations, if using more then one container the port will need to be defined with your container definitions).
 * `health_check_path` - A relative path for the services health checker to hit. Default is `/`.
 * `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
-* `entrypoint_override` - Your Docker entrypoint command. Default is the `ENTRYPOINT` directive from the Docker image.
-* `command_override` - Your Docker command. Default is the `CMD` directive from the Docker image.
 * `task_policy_json` - A JSON formated IAM policy providing the running container with permissions.  By default, no permissions granted.
 
 ##### Network and Routing Configuration
@@ -74,6 +70,12 @@ Features:
 * `cloudfront_log_bucket_name` - The S3 bucket name to store the CF access logs in. By default no logs will be stored.
 * `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
 
+## Examples
+
+### Working examples
+
+See the [examples directory](./examples) for some working terraform examples using different features
+
 ### Simple Example
 
 With this module you can deploy an http Fargate service with *just* two(2) variables. Yeah you heard that right, TWO VARIABLES. But be warned, this is as basic as it gets. Be warned that the container is publically accessible to the internet, so **use this method with caution!** We can't advise it but we can't help but emphasize the **easy** in `easy-fargate-service`.
@@ -83,7 +85,7 @@ The following example deploys a single container Fargate service on port 80 on t
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "~> 2.2"
+  version            = "~> 3.0"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
 }
@@ -96,7 +98,7 @@ An example with multiple containers, scaling configured, environment variables, 
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "~> 2.2"
+  version            = "~> 3.0"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
   cluster_name       = "my-ecs-cluster"
