@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.1
+
+* Adding outputs for HTTP and HTTPS listener ARNs
+
 ## v3.0.0
 
 * **BREAKING CHANGES:**

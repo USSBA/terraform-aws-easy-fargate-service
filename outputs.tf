@@ -22,4 +22,9 @@ output "security_group_id" {
 output "cloudfront" {
   value = try(aws_cloudfront_distribution.distribution[0], null)
 }
-
+output "http_listener_arn" {
+  value = try(aws_lb_listener.forward_http[0].arn, null)
+}
+output "https_listener_arn" {
+  value = try(aws_lb_listener.forward_https[0].arn, null)
+}
