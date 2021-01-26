@@ -46,6 +46,11 @@ Features:
 * `task_memory` - How much Memory should be reserved for the container (in MB). Default is `512`.
 * `container_port` - Port the container listens on. Default is `80` (only valid with single container configurations, if using more then one container the port will need to be defined with your container definitions).
 * `health_check_path` - A relative path for the services health checker to hit. Default is `/`.
+* `health_check_healthy_threshold` - The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 10.
+* `health_check_unhealthy_threshold` - The number of consecutive health check failures required before considering the target unhealthy. Defaults to 10.
+* `health_check_timeout` - The amount of time, in seconds, during which no response means a failed health check. Defaults to 2.
+* `health_check_interval` - The approximate amount of time, in seconds, between health checks of an individual target. Defaults to 30.
+* `health_check_matcher` - The HTTP codes to use when checking for a successful response from a target. Defaults to `200-399`.
 * `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
 * `task_policy_json` - A JSON formated IAM policy providing the running container with permissions.  By default, no permissions granted.
 
@@ -69,6 +74,7 @@ Features:
 * `regional_waf_acl_id` - An AWS Regional Web Application Firewall ID that will be attached to the ALB. By default no association will be made.
 * `cloudfront_log_bucket_name` - The S3 bucket name to store the CF access logs in. By default no logs will be stored.
 * `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
+* `deregistration_delay` - he amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused. The range is 0-3600 seconds. The default value is 20 seconds.
 
 ## Examples
 
