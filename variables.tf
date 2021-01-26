@@ -85,6 +85,31 @@ variable "health_check_path" {
   description = "Optional; A relative path for the services health checker to hit. By default it will hit the root."
   default     = "/"
 }
+variable "health_check_healthy_threshold" {
+  type        = number
+  description = "Optional; The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 10."
+  default     = 10
+}
+variable "health_check_unhealthy_threshold" {
+  type        = number
+  description = "Optional; The number of consecutive health check failures required before considering the target unhealthy. Defaults to 10."
+  default     = 10
+}
+variable "health_check_timeout" {
+  type        = number
+  description = "Optional; The amount of time, in seconds, during which no response means a failed health check. Defaults to 2"
+  default     = 2
+}
+variable "health_check_interval" {
+  type        = number
+  description = "Optional; The approximate amount of time, in seconds, between health checks of an individual target. Defaults to 30"
+  default     = 30
+}
+variable "health_check_matcher" {
+  type        = string
+  description = "Optional; The HTTP codes to use when checking for a successful response from a target. Defaults to '200-399'"
+  default     = "200-399"
+}
 variable "platform_version" {
   type        = string
   description = "Optional; The ECS backend platform version; Defaults to 1.4.0 so EFS is supported."
@@ -191,6 +216,11 @@ variable "cloudfront_log_prefix" {
   type        = string
   description = "Optional; A text prefix prepended to the log file when it is delivered."
   default     = ""
+}
+variable "deregistration_delay" {
+  type        = number
+  description = "Optional; The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused. The range is 0-3600 seconds. The default value is 20 seconds."
+  default     = 20
 }
 
 variable "container_definitions" {

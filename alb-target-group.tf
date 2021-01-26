@@ -16,17 +16,17 @@ resource "aws_lb_target_group" "alb" {
   protocol             = "HTTP"
   target_type          = "ip"
   vpc_id               = local.vpc_id
-  deregistration_delay = 20
+  deregistration_delay = var.deregistration_delay
 
   health_check {
-    interval            = 30
+    interval            = var.health_check_interval
     path                = var.health_check_path
     port                = var.container_port
     protocol            = "HTTP"
-    timeout             = 2
-    healthy_threshold   = 10
-    unhealthy_threshold = 10
-    matcher             = "200-399"
+    timeout             = var.health_check_timeout
+    healthy_threshold   = var.health_check_healthy_threshold
+    unhealthy_threshold = var.health_check_unhealthy_threshold
+    matcher             = var.health_check_matcher
   }
 
   tags = {
