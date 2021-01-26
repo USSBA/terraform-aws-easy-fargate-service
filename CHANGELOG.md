@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.1.0
+
+* Adding configurable ALB healthcheck
+* Adding in configurable deregistration delay
+
 ## v3.0.0
 
 * **BREAKING CHANGES:**
