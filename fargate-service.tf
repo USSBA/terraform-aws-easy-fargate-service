@@ -13,6 +13,7 @@ resource "aws_ecs_service" "fargate" {
   launch_type                        = "FARGATE"
   health_check_grace_period_seconds  = 10
   force_new_deployment               = true
+  tags                               = merge(var.tags, var.tags_ecs, var.tags_ecs_service)
 
   lifecycle {
     ignore_changes = [desired_count]

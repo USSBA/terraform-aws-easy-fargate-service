@@ -6,6 +6,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   is_ipv6_enabled = true
   price_class     = "PriceClass_100"
   web_acl_id      = length(var.global_waf_acl_id) == 0 ? null : var.global_waf_acl_id
+  tags            = merge(var.tags, var.tags_cloudfront)
   restrictions {
     geo_restriction {
       restriction_type = length(var.cloudfront_whitelist_geo_restrictions) > 0 ? "whitelist" : length(var.cloudfront_blacklist_geo_restrictions) > 0 ? "blacklist" : "none"

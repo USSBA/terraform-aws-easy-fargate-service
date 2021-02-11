@@ -76,6 +76,20 @@ Features:
 * `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
 * `deregistration_delay` - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused. The range is 0-3600 seconds. The default value is 20 seconds.
 
+##### Tagging
+
+All tags are optional maps of key-value pairs, and default to empty
+
+* `tags` - Tags to apply to all resources
+* `tags_ecs` - Tags to apply to all ecs resources
+* `tags_ecs_task_definition` - Tags to apply to the task definition
+* `tags_ecs_service` - Tags to apply to the ECS service
+* `tags_security_group` - Tags to apply to the security groups
+* `tags_alb` - Tags to apply to ALB resources
+* `tags_alb_tg` - Tags to apply to the ALB target group
+* `tags_cloudfront` - Tags to apply to CloudFront
+* `tags_iam_role` - Tags to apply to the IAM Roles
+
 ## Examples
 
 ### Working examples
