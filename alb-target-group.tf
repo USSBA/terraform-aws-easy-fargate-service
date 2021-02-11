@@ -29,9 +29,7 @@ resource "aws_lb_target_group" "alb" {
     matcher             = var.health_check_matcher
   }
 
-  tags = {
-    Name = "${var.family}-tg"
-  }
+  tags = merge(var.tags, var.tags_alb, var.tags_alb_tg)
 
   lifecycle { create_before_destroy = true }
 

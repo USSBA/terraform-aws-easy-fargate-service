@@ -14,6 +14,7 @@ resource "aws_lb" "alb" {
       enabled = true
     }
   }
+  tags = merge(var.tags, var.tags_alb)
 }
 resource "aws_wafregional_web_acl_association" "alb" {
   count        = length(var.regional_waf_acl_id) == 0 ? 0 : 1

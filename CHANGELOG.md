@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.2.0
+
+* Adding in tagging framework, new example to show usage of all tags
+
 ## v3.1.0
 
 * Adding configurable ALB healthcheck

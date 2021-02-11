@@ -11,6 +11,7 @@ data "aws_iam_policy_document" "ecs_task_principal" {
 resource "aws_iam_role" "ecs_task" {
   name               = "${var.family}-task"
   assume_role_policy = data.aws_iam_policy_document.ecs_task_principal.json
+  tags               = merge(var.tags, var.tags_iam_role)
 }
 resource "aws_iam_role_policy" "ecs_task" {
   count  = var.task_policy_json != "" ? 1 : 0

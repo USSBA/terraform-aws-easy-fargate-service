@@ -247,3 +247,49 @@ variable "container_definitions" {
     condition     = length(distinct([for def in var.container_definitions : def.portMappings[0].containerPort if can(def.portMappings[0].containerPort)])) == length([for def in var.container_definitions : def.portMappings[0].containerPort if can(def.portMappings[0].containerPort)])
   }
 }
+
+variable "tags" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to all applicable resources"
+  default     = {}
+}
+variable "tags_ecs" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to the ecs resources"
+  default     = {}
+}
+variable "tags_ecs_task_definition" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to the ecs task definition"
+  default     = {}
+}
+variable "tags_ecs_service" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to the ecs service"
+  default     = {}
+}
+variable "tags_security_group" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to the security group"
+  default     = {}
+}
+variable "tags_alb" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to the Application Load Balancer resources"
+  default     = {}
+}
+variable "tags_alb_tg" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to the Application Load Balancer Target Group"
+  default     = {}
+}
+variable "tags_cloudfront" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to CloudFront"
+  default     = {}
+}
+variable "tags_iam_role" {
+  type        = map(any)
+  description = "Optional; Map of key-value tags to apply to IAM Roles"
+  default     = {}
+}
