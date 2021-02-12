@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.2.1
+
+* BUGFIX: Accounts not opted-in to new ARNs for ECS can't add ECS Service tags, adding flag to disable in such a case
+
 ## v3.2.0
 
 * Adding in tagging framework, new example to show usage of all tags
