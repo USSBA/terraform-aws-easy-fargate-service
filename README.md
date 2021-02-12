@@ -90,6 +90,8 @@ All tags are optional maps of key-value pairs, and default to empty
 * `tags_cloudfront` - Tags to apply to CloudFront
 * `tags_iam_role` - Tags to apply to the IAM Roles
 
+* `tags_ecs_service_enabled` - Enable/Disable all tags on ECS Service to avoid conflicts with Accounts/Clusters using the old ARN formats.  Defaults to true, adding tags to all ecs services
+
 ## Examples
 
 ### Working examples

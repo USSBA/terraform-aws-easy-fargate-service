@@ -268,6 +268,11 @@ variable "tags_ecs_service" {
   description = "Optional; Map of key-value tags to apply to the ecs service"
   default     = {}
 }
+variable "tags_ecs_service_enabled" {
+  type        = bool
+  description = "Optional; Enable/Disable all tags on ECS Service to avoid conflicts with Accounts/Clusters using the old ARN formats.  Defaults to true, adding tags to all ecs services"
+  default     = true
+}
 variable "tags_security_group" {
   type        = map(any)
   description = "Optional; Map of key-value tags to apply to the security group"
