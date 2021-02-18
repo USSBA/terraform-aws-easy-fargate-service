@@ -39,7 +39,6 @@ Features:
 * `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event. Default is no scaling.
 * `efs_configs` - Optional; List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
 * `log_group_name` - The name of the log group. By default the `family` variable will be used.
-* `log_group_stream_prefix` - The name of the log group stream prefix. By default this will be `container`.
 * `log_group_retention_in_days` - The number of days to retain the log group. By default logs will never expire.
 * `log_group_region` - The region where the log group exists. By default the current region will be used.
 * `task_cpu` - How much CPU should be reserved for the container (in aws cpu-units). Default is `256`.

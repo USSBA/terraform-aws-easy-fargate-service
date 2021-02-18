@@ -15,7 +15,7 @@
 
 ## v3.0.0
 
-* **BREAKING CHANGES:**
+* **BREAKING CONFIGURATION CHANGES:**
   * `container_definition` has been REMOVED, use `container_definitions` list of maps instead.
   * `efs_config` has been REMOVED, use `efs_configs` list of maps instead.
   * `container_secrets` has been REMOVED, use `container_definitions[].secrets` map instead
@@ -24,6 +24,10 @@
   * `container_environment` has been REMOVED, use `container_definitions[].environment` instead.
   * `entrypoint_override` has been REMOVED, use `container_definitions[].entryPoint` instead.
   * `command_override` has been REMOVED, use `container_definitions[].command` instead.
+  * `log_group_stream_prefix` has been REMOVED, and the `container_definition[].name` will instead be used for all `log_group_stream_prefixes`
+* **RESOURCE REPLACING CHANGES:**
+  * Target Groups will now add a randomized suffix to facilitate easier replacement when dependent configuration changes
+    * This causes all TargetGroups (and dependent resources) to be replaced.
 * `task_cpu` will now be divided evenly across containers unless explictly set by the container definition(s).
 * `task_memory` will now be divided evenly across containers unless explictly set by the container definition(s).
 
