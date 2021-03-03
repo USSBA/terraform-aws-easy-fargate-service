@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.2.2
+
+* If only `private_subnet_ids` are provided then the Fargate service and the ALB will be placed in them and will become an internal-facing load-balancer.
+* If only `public_subnet_ids` are provided then the Fargate service and the ALB will be placed in them and will become a public-facing load-balancer.
+* If neither `private_subnet_ids` and `public_subnet_ids` are provided then the default VPC subnets will be assumed and will become a public-facing load-balancer.
+* If both `private_subnet_ids` and `public_subnet_ids` are provided then no change should occur.
+
 ## v3.2.1
 
 * BUGFIX: Accounts not opted-in to new ARNs for ECS can't add ECS Service tags, adding flag to disable in such a case

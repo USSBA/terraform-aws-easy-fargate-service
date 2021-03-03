@@ -56,8 +56,8 @@ Features:
 ##### Network and Routing Configuration
 
 * `vpc_id` - The VPC Id in which resources will be provisioned. Default is the default AWS vpc.
-* `private_subnet_ids` - A set of subnet ID's that will be associated with the Farage service. By default the module will use the default vpc's public subnets.
-* `public_subnet_ids` - A set of subnet ID's that will be associated with the Application Load-balancer. By default the module will use the default vpc's public subnets.
+* `private_subnet_ids` - A set if subnet Id's. If configured will be assocaited with the Fargate service. If not configured and `public_subnet_ids` contains value they will be associated instead. If no public or private subnet Id's are passed to the module then the VPC's default subnets will be used and the ALB will be public-facing.
+* `public_subnet_ids` - A set of subnet Id's. If configured will be assocaited with the ALB. If not configured and `private_subnet_ids` contains value the ALB will be internal-facing. If no public or private subnet Id's are passed to the module then the VPC's default sunets will be used and the ALB will be public-facing.
 * `security_group_ids` - A set of additional security group ID's that will associated to the Fargate service network interface. Default is `[]`.
 * `certificate_arn` - A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http.
 * `hosted_zone_id` - The hosted zone ID where the A record will be created. Required if `certificate_arn` is set.
