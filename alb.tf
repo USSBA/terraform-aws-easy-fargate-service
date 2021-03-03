@@ -1,9 +1,9 @@
 resource "aws_lb" "alb" {
   name               = "${var.family}-alb"
-  internal           = false
+  internal           = !local.public_subnet_ids_provided && local.private_subnet_ids_provided
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
-  subnets            = length(var.public_subnet_ids) > 0 ? var.public_subnet_ids : data.aws_subnet_ids.default[0].ids
+  subnets            = local.public_subnet_ids_provided ? var.public_subnet_ids : local.private_subnet_ids_provided ? var.private_subnet_ids : data.aws_subnet_ids.default[0].ids
   ip_address_type    = "ipv4"
 
   dynamic "access_logs" {
