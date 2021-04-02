@@ -2,17 +2,14 @@ resource "aws_security_group" "alb" {
   name        = "${var.family}-alb-sg"
   description = "A security group used by the ${var.family} application load balancer"
   vpc_id      = local.vpc_id
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = { for item in local.listeners : item.port => item }
+    content {
+      from_port   = ingress.value.port
+      to_port     = ingress.value.port
+      protocol    = "tcp"
+      cidr_blocks = local.is_internal && var.vpc_id != "" ? [data.aws_vpc.other[0].cidr_block] : ["0.0.0.0/0"]
+    }
   }
   egress {
     from_port   = 0

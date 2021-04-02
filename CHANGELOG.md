@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.0.0
+
+* **BREAKING CHANGES**
+  * Added a `listeners` variable allowing developers to override default settings.
+  * Prior listener resources will be destroyed as the namespace has changed and new listeners will be provisioned which may cause a short service interruption (&lt; 10 seconds). Older providers may require the TargetGroup to be replaced which may lead to a lengthier downtime.
+
+* **NEW FEATURES**
+* `deployment_maximum_percent` is now configurable.
+* `deployment_minimum_healthy_percent` is now configurable.
+* If the ALB is `internal` then the security groups will restrict traffic from the VPC cidr_block instead of from anywhere.
+
 ## v3.2.2
 
 * If only `private_subnet_ids` are provided then the Fargate service and the ALB will be placed in them and will become an internal-facing load-balancer.
@@ -35,8 +46,8 @@
 * **RESOURCE REPLACING CHANGES:**
   * Target Groups will now add a randomized suffix to facilitate easier replacement when dependent configuration changes
     * This causes all TargetGroups (and dependent resources) to be replaced.
-* `task_cpu` will now be divided evenly across containers unless explictly set by the container definition(s).
-* `task_memory` will now be divided evenly across containers unless explictly set by the container definition(s).
+* `task_cpu` will now be divided evenly across containers unless explicitly set by the container definition(s).
+* `task_memory` will now be divided evenly across containers unless explicitly set by the container definition(s).
 
 ## v2.4.0
 
@@ -50,7 +61,7 @@
 
 ## v2.3.0
 
-* Switching 'no-value' from null to empty string, empty list, or negative number to prevent Terraform Registry from showing optional variables as requred
+* Switching 'no-value' from null to empty string, empty list, or negative number to prevent Terraform Registry from showing optional variables as required
 
 ## v2.2.1
 
@@ -58,7 +69,7 @@
 
 ## v2.2.0
 
-* Added support for optional CloudFront distributon
+* Added support for optional CloudFront distribution
 
 ## v2.1.0
 

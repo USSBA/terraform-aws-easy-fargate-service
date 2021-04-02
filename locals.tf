@@ -12,6 +12,11 @@ data "aws_subnet_ids" "default" {
   vpc_id = local.vpc_id
 }
 
+data "aws_vpc" "other" {
+  count = local.is_internal && var.vpc_id != "" ? 1 : 0
+  id    = var.vpc_id
+}
+
 locals {
   region                      = data.aws_region.current.name
   account_id                  = data.aws_caller_identity.current.account_id
@@ -19,5 +24,5 @@ locals {
   private_subnet_ids_provided = length(var.private_subnet_ids) > 0
   public_subnet_ids_provided  = length(var.public_subnet_ids) > 0
   use_default_subnets         = !local.private_subnet_ids_provided && !local.public_subnet_ids_provided
-
+  is_internal                 = local.private_subnet_ids_provided && !local.public_subnet_ids_provided
 }

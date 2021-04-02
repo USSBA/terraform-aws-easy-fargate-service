@@ -40,6 +40,16 @@ variable "scaling_threshold" {
   description = "Optional; The percentage in which the scaling metric will trigger a scaling event. Default is no scaling."
   default     = -1
 }
+variable "deployment_maximum_percent" {
+  type        = number
+  description = "Optional; Upper limit on the number of running tasks that can be during a deployment. Default is 200."
+  default     = 200
+}
+variable "deployment_minimum_healthy_percent" {
+  type        = number
+  description = "Optional; Lower limit percentage of tasks that must be reporting healthy during a deployment. Default is 100."
+  default     = 100
+}
 variable "efs_configs" {
   type = list(object({
     container_name = string
@@ -221,6 +231,11 @@ variable "deregistration_delay" {
   type        = number
   description = "Optional; The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused. The range is 0-3600 seconds. The default value is 20 seconds."
   default     = 20
+}
+
+variable "listeners" {
+  description = "Optional; The ALB listener configuration."
+  default     = []
 }
 
 variable "container_definitions" {

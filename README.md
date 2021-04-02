@@ -37,7 +37,9 @@ Features:
 * `min_capacity` - The minimum number of containers running in the service. Default is same as `desired_capacity`.
 * `scaling_metric` - A type of target scaling. Needs to be either `cpu` or `memory`. Default is no scaling.
 * `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event. Default is no scaling.
-* `efs_configs` - Optional; List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
+* `deployment_maximum_percent` - Upper limit on the number of running tasks that can be during a deployment. Default is 200.
+* `deployment_minimum_healthy_percent` - Lower limit percentage of tasks that must be reporting healthy during a deployment. Default is 100.
+* `efs_configs` - List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
 * `log_group_name` - The name of the log group. By default the `family` variable will be used.
 * `log_group_retention_in_days` - The number of days to retain the log group. By default logs will never expire.
 * `log_group_region` - The region where the log group exists. By default the current region will be used.
@@ -51,13 +53,13 @@ Features:
 * `health_check_interval` - The approximate amount of time, in seconds, between health checks of an individual target. Defaults to 30.
 * `health_check_matcher` - The HTTP codes to use when checking for a successful response from a target. Defaults to `200-399`.
 * `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
-* `task_policy_json` - A JSON formated IAM policy providing the running container with permissions.  By default, no permissions granted.
+* `task_policy_json` - A JSON formatted IAM policy providing the running container with permissions.  By default, no permissions granted.
 
 ##### Network and Routing Configuration
 
 * `vpc_id` - The VPC Id in which resources will be provisioned. Default is the default AWS vpc.
-* `private_subnet_ids` - A set if subnet Id's. If configured will be assocaited with the Fargate service. If not configured and `public_subnet_ids` contains value they will be associated instead. If no public or private subnet Id's are passed to the module then the VPC's default subnets will be used and the ALB will be public-facing.
-* `public_subnet_ids` - A set of subnet Id's. If configured will be assocaited with the ALB. If not configured and `private_subnet_ids` contains value the ALB will be internal-facing. If no public or private subnet Id's are passed to the module then the VPC's default sunets will be used and the ALB will be public-facing.
+* `private_subnet_ids` - A set if subnet Id's. If configured will be associated with the Fargate service. If not configured and `public_subnet_ids` contains value they will be associated instead. If no public or private subnet Id's are passed to the module then the VPCs default subnets will be used and the ALB will be public-facing.
+* `public_subnet_ids` - A set of subnet Id's. If configured will be associated with the ALB. If not configured and `private_subnet_ids` contains value the ALB will be internal-facing. If no public or private subnet Id's are passed to the module then the VPCs default subnets will be used and the ALB will be public-facing.
 * `security_group_ids` - A set of additional security group ID's that will associated to the Fargate service network interface. Default is `[]`.
 * `certificate_arn` - A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http.
 * `hosted_zone_id` - The hosted zone ID where the A record will be created. Required if `certificate_arn` is set.
@@ -66,14 +68,15 @@ Features:
 * `alb_log_bucket_name` - The S3 bucket name to store the ALB access logs in.
 * `alb_log_prefix` - Prefix for each object created in ALB access log bucket.
 * `use_cloudfront` - When `true` this module will attempt to provision a CF distribution. If a `certificate_arn` is used then both `hosted_zone_id` and `service_fqdn` will be required. Otherwise the default CF certificate is used. Default is `false`
-* `cloudfront_blacklist_geo_restrictions` - A set of alpha-2 country codes. Request orginating from these countries will be blocked and all other will be allowed. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
-* `cloudfront_whitelist_geo_restrictions` - A set of alpha-2 country codes. Request orginating from these countries will be allowed and all other will be blocked. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
+* `cloudfront_blacklist_geo_restrictions` - A set of alpha-2 country codes. Request originating from these countries will be blocked and all other will be allowed. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
+* `cloudfront_whitelist_geo_restrictions` - A set of alpha-2 country codes. Request originating from these countries will be allowed and all other will be blocked. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
 * `cloudfront_origin_custom_headers` - A set of custom headers (name/value pairs) that will be passed to the origin. Typically used to pass a secret header and value to an ALB with a WAF to prevent connections directly to the ALB except when this secret header and value are present.
-* `global_waf_acl_id` - An AWS Global Web Applicaiton Firewall ID that will be attached to the CF distribution. By default no association will be made.
+* `global_waf_acl_id` - An AWS Global Web Application Firewall ID that will be attached to the CF distribution. By default no association will be made.
 * `regional_waf_acl_id` - An AWS Regional Web Application Firewall ID that will be attached to the ALB. By default no association will be made.
 * `cloudfront_log_bucket_name` - The S3 bucket name to store the CF access logs in. By default no logs will be stored.
 * `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
 * `deregistration_delay` - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused. The range is 0-3600 seconds. The default value is 20 seconds.
+* `listeners` - The ALB listener port configuration. By default port 80 will be forwarded unless a certificate is provided then port 80 will redirect to port 443 which will then be forwarded. Here are some [examples](./examples/listener/main.tf) of listener configurations.
 
 ##### Tagging
 
@@ -99,14 +102,14 @@ See the [examples directory](./examples) for some working terraform examples usi
 
 ### Simple Example
 
-With this module you can deploy an http Fargate service with *just* two(2) variables. Yeah you heard that right, TWO VARIABLES. But be warned, this is as basic as it gets. Be warned that the container is publically accessible to the internet, so **use this method with caution!** We can't advise it but we can't help but emphasize the **easy** in `easy-fargate-service`.
+With this module you can deploy an http Fargate service with *just* two(2) variables. Yeah you heard that right, TWO VARIABLES. But be warned, this is as basic as it gets. Be warned that the container is publicly accessible to the internet, so **use this method with caution!** We can't advise it but we can't help but emphasize the **easy** in `easy-fargate-service`.
 
 The following example deploys a single container Fargate service on port 80 on the AWS default vpc:
 
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "~> 3.0"
+  version            = "~> 4.0"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
 }
@@ -119,7 +122,7 @@ An example with multiple containers, scaling configured, environment variables, 
 ```terraform
 module "my-ez-fargate-service" {
   source             = "USSBA/easy-fargate-service/aws"
-  version            = "~> 3.0"
+  version            = "~> 4.0"
   family             = "my-ez-fargate-service"
   container_image    = "nginx:latest"
   cluster_name       = "my-ecs-cluster"
