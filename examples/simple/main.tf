@@ -1,7 +1,7 @@
 module "my-ez-fargate-service" {
-  #source             = "USSBA/easy-fargate-service/aws"
-  #version            = "~> 3.0"
-  source = "../../"
+  source  = "USSBA/easy-fargate-service/aws"
+  version = "~> 4.0"
+
   family = "ez-fargate-svc-simple"
   container_definitions = [
     {
@@ -9,12 +9,6 @@ module "my-ez-fargate-service" {
       image = "nginx:latest"
     },
   ]
-  #environment = [
-  #  {
-  #    name = "foo"
-  #    value = "bar"
-  #  },
-  #]
   tags = {
     ManagedBy = "Terraform"
     foo       = "foo"

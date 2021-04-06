@@ -1,6 +1,6 @@
 resource "aws_lb" "alb" {
   name               = "${var.family}-alb"
-  internal           = !local.public_subnet_ids_provided && local.private_subnet_ids_provided
+  internal           = local.is_internal
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
   subnets            = local.public_subnet_ids_provided ? var.public_subnet_ids : local.private_subnet_ids_provided ? var.private_subnet_ids : data.aws_subnet_ids.default[0].ids

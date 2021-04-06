@@ -7,8 +7,8 @@ resource "aws_ecs_service" "fargate" {
   cluster                            = "arn:aws:ecs:${local.region}:${local.account_id}:cluster/${var.cluster_name}"
   task_definition                    = aws_ecs_task_definition.fargate.arn
   desired_count                      = var.desired_capacity
-  deployment_maximum_percent         = 200
-  deployment_minimum_healthy_percent = 100
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
   platform_version                   = var.platform_version
   launch_type                        = "FARGATE"
   health_check_grace_period_seconds  = 10
