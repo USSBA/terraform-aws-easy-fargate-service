@@ -13,14 +13,7 @@ module "my-ez-fargate-service" {
     ManagedBy = "Terraform"
     foo       = "foo"
   }
-  tags_ecs_task_definition = {
-    isTaskDefinition = "Very Yes"
-    foo              = "bar"
-  }
-  tags_security_group = {
-    isSecurityGroup = "Very Yes"
-    foo             = "baz"
-  }
+  enable_execute_command = true
 }
 output "alb_dns" {
   value = module.my-ez-fargate-service.alb_dns

@@ -313,3 +313,8 @@ variable "tags_iam_role" {
   description = "Optional; Map of key-value tags to apply to IAM Roles"
   default     = {}
 }
+variable "enable_execute_command" {
+  type        = bool
+  description = "Optional; Enable executing into running tasks using ECS Exec.  NOTE: Enabling this grants tasks ssmmessages and logs write permissions"
+  default     = false
+}

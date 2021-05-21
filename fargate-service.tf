@@ -12,6 +12,7 @@ resource "aws_ecs_service" "fargate" {
   platform_version                   = var.platform_version
   launch_type                        = "FARGATE"
   health_check_grace_period_seconds  = 10
+  enable_execute_command             = var.enable_execute_command
   force_new_deployment               = true
   tags                               = var.tags_ecs_service_enabled ? merge(var.tags, var.tags_ecs, var.tags_ecs_service) : null
 
