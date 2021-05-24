@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.0.1
+* **BUGFIXES**
+  * Fix security group rules when container port is non-80
+
 ## v5.0.0
 * **BREAKING CHANGES**
   * Bump to aws provider >= 3.34
