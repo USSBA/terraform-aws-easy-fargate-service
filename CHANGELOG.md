@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.0.0
+* **BREAKING CHANGES**
+  * Bump to aws provider >= 3.34
+* **NEW FEATURES**
+  * `enable_execute_command` support added to enable ssm'ing into a running fargate container
+
 ## v4.0.0
 
 * **BREAKING CHANGES**

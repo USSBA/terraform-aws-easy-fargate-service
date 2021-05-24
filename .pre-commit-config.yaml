@@ -12,10 +12,10 @@ repos:
         rev: v1.43.0
         hooks:
         -   id: terraform_fmt
-    -   repo: https://github.com/markdownlint/markdownlint
-        rev: master
-        hooks:
-        -   id: markdownlint
-            args: [--rules,"~MD013,~MD029"]
-            # ~MD013: Exclude rule for line-length
-            # ~MD029: Exclude rule checking for numbered lists only starting with "1."
+#    -   repo: https://github.com/markdownlint/markdownlint
+#        rev: master
+#        hooks:
+#        -   id: markdownlint
+#            args: [--rules,"~MD013,~MD029"]
+#            # ~MD013: Exclude rule for line-length
+#            # ~MD029: Exclude rule checking for numbered lists only starting with "1."
