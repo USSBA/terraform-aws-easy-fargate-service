@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.0.1 [backported]
+* **BUGFIXES**
+  * Fix security group rules when container port is non-80
+
 ## v4.0.0
 
 * **BREAKING CHANGES**

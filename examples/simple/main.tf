@@ -1,12 +1,19 @@
 module "my-ez-fargate-service" {
-  source  = "USSBA/easy-fargate-service/aws"
-  version = "~> 4.0"
+  #source  = "USSBA/easy-fargate-service/aws"
+  #version = "~> 4.0"
+  source = "../../"
 
-  family = "ez-fargate-svc-simple"
+  family         = "ez-fargate-svc-simple"
+  container_port = "8080"
   container_definitions = [
     {
-      name  = "nginx"
-      image = "nginx:latest"
+      name  = "python"
+      image = "python:3"
+      command = [
+        "/bin/bash",
+        "-c",
+        "mkdir /root/hello; cd /root/hello; echo hello > hello.html; python3 -m http.server 8080",
+      ]
     },
   ]
   tags = {
