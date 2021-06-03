@@ -40,6 +40,7 @@ Features:
 * `deployment_maximum_percent` - Upper limit on the number of running tasks that can be during a deployment. Default is 200.
 * `deployment_minimum_healthy_percent` - Lower limit percentage of tasks that must be reporting healthy during a deployment. Default is 100.
 * `efs_configs` - List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
+* `enable_execute_command` - Enable executing command inside a container running in Fargate service. Default is false.
 * `log_group_name` - The name of the log group. By default the `family` variable will be used.
 * `log_group_retention_in_days` - The number of days to retain the log group. By default logs will never expire.
 * `log_group_region` - The region where the log group exists. By default the current region will be used.
