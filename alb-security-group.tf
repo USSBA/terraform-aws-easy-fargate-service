@@ -1,17 +1,7 @@
-resource "aws_security_group" "alb" {
-  name        = "${var.family}-alb-sg"
+resource "aws_security_group" "alb_ingress" {
+  name        = "${var.family}-alb"
   description = "A security group used by the ${var.family} application load balancer"
   vpc_id      = local.vpc_id
-
-  dynamic "ingress" {
-    for_each = { for item in local.listeners : item.port => item }
-    content {
-      from_port   = ingress.value.port
-      to_port     = ingress.value.port
-      protocol    = "tcp"
-      cidr_blocks = local.is_internal && var.vpc_id != "" ? [data.aws_vpc.other[0].cidr_block] : ["0.0.0.0/0"]
-    }
-  }
 
   egress {
     from_port   = 0
@@ -20,4 +10,17 @@ resource "aws_security_group" "alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = merge(var.tags, var.tags_alb, var.tags_security_group)
+}
+
+resource "aws_security_group_rule" "alb_ingress" {
+  ## Only create ingress rules when there's no explicit alb_security_groups being passed in
+  ## Need to keep the security group to ensure the fargate containers allow access to the ALB
+  for_each = length(var.alb_security_group_ids) > 0 ? {} : { for item in local.listeners : item.port => item }
+
+  security_group_id = aws_security_group.alb_ingress.id
+  from_port         = each.value.port
+  to_port           = each.value.port
+  protocol          = "tcp"
+  type              = "ingress"
+  cidr_blocks       = local.is_internal && var.vpc_id != "" ? [data.aws_vpc.other[0].cidr_block] : ["0.0.0.0/0"]
 }

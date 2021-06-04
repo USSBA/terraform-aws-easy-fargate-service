@@ -1,5 +1,13 @@
 # Changelog
 
+## v6.0.0
+* **BREAKING CHANGES**
+  * Switching to rule resources requires recreating the security group with a new name
+* **NEW FEATURES**
+  * `alb_security_group_ids` support providing your own security groups to the ALB
+  * Fixed a "bug" preventing module names with underscores (due to ALB API nonsense)
+
+
 ## v5.0.1
 * **BUGFIXES**
   * Fix security group rules when container port is non-80

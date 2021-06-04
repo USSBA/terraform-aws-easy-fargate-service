@@ -10,7 +10,7 @@ resource "random_string" "tg_suffix" {
 }
 resource "aws_lb_target_group" "alb" {
   # Excluding "name" field to allow for easier replacement when changing properties
-  name = "${var.family}-${random_string.tg_suffix.result}"
+  name = replace("${var.family}-${random_string.tg_suffix.result}", "_", "-") # Convert underscores to hyphens to support the ALB API
   #name_prefix          = substr(var.family, 0, 6)
   port                 = var.container_port
   protocol             = "HTTP"
