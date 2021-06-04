@@ -157,6 +157,11 @@ variable "security_group_ids" {
   description = "Optional; A set of additional security group ID's that will associated to the Fargate service network interface."
   default     = []
 }
+variable "alb_security_group_ids" {
+  type        = list(string)
+  description = "Optional; A set of security group ID's that will associated to the Application Load Balancer.  By default, a security group open to the world is created."
+  default     = []
+}
 variable "certificate_arn" {
   type        = string
   description = "Optional; A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http."
@@ -318,3 +323,4 @@ variable "enable_execute_command" {
   description = "Optional; Enable executing into running tasks using ECS Exec.  NOTE: Enabling this grants tasks ssmmessages and logs write permissions"
   default     = false
 }
+

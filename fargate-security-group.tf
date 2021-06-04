@@ -18,5 +18,5 @@ resource "aws_security_group_rule" "fargate_ingress_alb" {
   to_port                  = var.container_port
   protocol                 = "tcp"
   security_group_id        = aws_security_group.fargate.id
-  source_security_group_id = aws_security_group.alb.id
+  source_security_group_id = aws_security_group.alb_ingress.id
 }

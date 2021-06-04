@@ -61,6 +61,7 @@ Features:
 * `private_subnet_ids` - A set if subnet Id's. If configured will be associated with the Fargate service. If not configured and `public_subnet_ids` contains value they will be associated instead. If no public or private subnet Id's are passed to the module then the VPCs default subnets will be used and the ALB will be public-facing.
 * `public_subnet_ids` - A set of subnet Id's. If configured will be associated with the ALB. If not configured and `private_subnet_ids` contains value the ALB will be internal-facing. If no public or private subnet Id's are passed to the module then the VPCs default subnets will be used and the ALB will be public-facing.
 * `security_group_ids` - A set of additional security group ID's that will associated to the Fargate service network interface. Default is `[]`.
+* `alb_security_group_ids` - A set of additional security group ID's that will associated to the ALB.  Configuring these will override the default security group ingress rules.  Default is `[]`.
 * `certificate_arn` - A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http.
 * `hosted_zone_id` - The hosted zone ID where the A record will be created. Required if `certificate_arn` is set.
 * `service_fqdn` - Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` is set.
