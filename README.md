@@ -32,13 +32,6 @@ Features:
 ##### Fargate Task and Service Configuration
 
 * `cluster_name` - The name of the ECS cluster where the Fargate service will run. Default is the default AWS cluster.
-* `desired_capacity` - The desired number of containers running in the service. Default is `1`.
-* `max_capacity` - The maximum number of containers running in the service. Default is same as `desired_capacity`.
-* `min_capacity` - The minimum number of containers running in the service. Default is same as `desired_capacity`.
-* `scaling_metric` - A type of target scaling. Needs to be either `cpu` or `memory`. Default is no scaling.
-* `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event. Default is no scaling.
-* `deployment_maximum_percent` - Upper limit on the number of running tasks that can be during a deployment. Default is 200.
-* `deployment_minimum_healthy_percent` - Lower limit percentage of tasks that must be reporting healthy during a deployment. Default is 100.
 * `efs_configs` - List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
 * `enable_execute_command` - Enable executing command inside a container running in Fargate service. Default is false.
 * `log_group_name` - The name of the log group. By default the `family` variable will be used.
@@ -47,14 +40,26 @@ Features:
 * `task_cpu` - How much CPU should be reserved for the container (in aws cpu-units). Default is `256`.
 * `task_memory` - How much Memory should be reserved for the container (in MB). Default is `512`.
 * `container_port` - Port the container listens on. Default is `80` (only valid with single container configurations, if using more then one container the port will need to be defined with your container definitions).
+* `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
+* `task_policy_json` - A JSON formatted IAM policy providing the running container with permissions.  By default, no permissions granted.
+
+##### Deployment and Scaling Configuration
+* `desired_capacity` - The desired number of containers running in the service. Default is `1`.
+* `max_capacity` - The maximum number of containers running in the service. Default is same as `desired_capacity`.
+* `min_capacity` - The minimum number of containers running in the service. Default is same as `desired_capacity`.
+* `scaling_metric` - A type of target scaling. Needs to be either `cpu` or `memory`. Default is no scaling.
+* `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event. Default is no scaling.
 * `health_check_path` - A relative path for the services health checker to hit. Default is `/`.
 * `health_check_healthy_threshold` - The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 10.
 * `health_check_unhealthy_threshold` - The number of consecutive health check failures required before considering the target unhealthy. Defaults to 10.
 * `health_check_timeout` - The amount of time, in seconds, during which no response means a failed health check. Defaults to 2.
 * `health_check_interval` - The approximate amount of time, in seconds, between health checks of an individual target. Defaults to 30.
 * `health_check_matcher` - The HTTP codes to use when checking for a successful response from a target. Defaults to `200-399`.
-* `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
-* `task_policy_json` - A JSON formatted IAM policy providing the running container with permissions.  By default, no permissions granted.
+* `deregistration_delay` - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused. The range is 0-3600 seconds. The default value is 20 seconds.
+* `deployment_maximum_percent` - Upper limit on the number of running tasks that can be during a deployment. Default is 200.
+* `deployment_minimum_healthy_percent` - Lower limit percentage of tasks that must be reporting healthy during a deployment. Default is 100.
+* `enable_deployment_rollbacks` - Turn on rollbacks for deployments.  This means that if a deployment fails, it will roll back to the previous version.  Defaults to `false`, but `true` is the recommended setting for production environments.
+* `wait_for_steady_state` - Configure terraform to wait for ECS service to be deployed and stable before terraform finishes.  Note that Fargate deployments can take a remarkably long time to reach a steady state, and thus your terraform deployment times will increase by a few minutes.  Defaults to `false`, but `true` is recommended for production environments.
 
 ##### Network and Routing Configuration
 
@@ -77,7 +82,6 @@ Features:
 * `regional_waf_acl_id` - An AWS Regional Web Application Firewall ID that will be attached to the ALB. By default no association will be made.
 * `cloudfront_log_bucket_name` - The S3 bucket name to store the CF access logs in. By default no logs will be stored.
 * `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
-* `deregistration_delay` - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused. The range is 0-3600 seconds. The default value is 20 seconds.
 * `listeners` - The ALB listener port configuration. By default port 80 will be forwarded unless a certificate is provided then port 80 will redirect to port 443 which will then be forwarded. Here are some [examples](./examples/listener/main.tf) of listener configurations.
 
 ##### Tagging

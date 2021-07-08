@@ -1,5 +1,13 @@
 # Changelog
 
+## v6.1.0
+
+* **NEW FEATURES**
+  * `enable_deployment_rollbacks` - allows for rollbacks if a container fails to reach a steady state
+  * `wait_for_steady_state` - Makes terraform wait until the ECS Service has fully deployed to a steady state before progressing
+* **SECURITY UPDATES**
+  * Bump SSL Policy on ALB Listeners
+
 ## v6.0.0
 * **BREAKING CHANGES**
   * Switching to rule resources requires recreating the security group with a new name

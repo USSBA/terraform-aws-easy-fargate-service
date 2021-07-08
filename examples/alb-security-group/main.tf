@@ -51,7 +51,7 @@ module "easy_fargate_alb_sg" {
   #version = "~> 6.0"
   source = "../../"
 
-  family         = "easy_fargate_alb_sg"
+  family = "easy_fargate_alb_sg"
   container_definitions = [
     {
       name  = "nginx"

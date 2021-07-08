@@ -324,3 +324,14 @@ variable "enable_execute_command" {
   default     = false
 }
 
+variable "enable_deployment_rollbacks" {
+  type        = bool
+  description = "Optional; Enable application rollbacks, managed by ECS.  Defaults to false, but true is the recommended setting for production deployments"
+  default     = false
+}
+
+variable "wait_for_steady_state" {
+  type        = bool
+  description = "Optional; Configure terraform to wait for ECS service to be deployed and stable before terraform finishes.  Note that Fargate deployments can take a remarkably long time to reach a steady state, and thus your terraform deployment times will increase by a few minutes.  Defaults to false"
+  default     = false
+}

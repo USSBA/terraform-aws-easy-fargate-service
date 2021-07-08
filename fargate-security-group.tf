@@ -19,4 +19,5 @@ resource "aws_security_group_rule" "fargate_ingress_alb" {
   protocol                 = "tcp"
   security_group_id        = aws_security_group.fargate.id
   source_security_group_id = aws_security_group.alb_ingress.id
+  description              = "Allow ALB to access Fargate Service"
 }
