@@ -15,6 +15,16 @@ resource "aws_ecs_service" "fargate" {
   enable_execute_command             = var.enable_execute_command
   force_new_deployment               = true
   tags                               = var.tags_ecs_service_enabled ? merge(var.tags, var.tags_ecs, var.tags_ecs_service) : null
+  wait_for_steady_state              = var.wait_for_steady_state
+
+  # Deployment Rollbacks
+  dynamic "deployment_circuit_breaker" {
+    for_each = var.enable_deployment_rollbacks ? ["enabled"] : []
+    content {
+      enable   = true
+      rollback = true
+    }
+  }
 
   lifecycle {
     ignore_changes = [desired_count]
