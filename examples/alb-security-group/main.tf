@@ -63,13 +63,14 @@ module "easy_fargate_alb_sg" {
     ManagedBy = "Terraform"
   }
   alb_security_group_ids = [aws_security_group.alb_sg.id]
+  alb_idle_timeout       = 300
+  wait_for_steady_state  = true
 }
 output "dev_connection_information" {
   value = <<-EOT
 
     ****
     **** Connect to fargate service: http://${module.easy_fargate_alb_sg.alb_dns}/ from IP address: ${local.dev_ip}
-    **** Containers will take a few moments to startup
     ****
     EOT
 }

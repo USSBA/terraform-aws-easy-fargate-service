@@ -192,6 +192,11 @@ variable "alb_log_prefix" {
   description = "Optional; Prefix for each object created in ALB access log bucket."
   default     = ""
 }
+variable "alb_idle_timeout" {
+  type        = number
+  description = "Optional; Idle Timeout config for the ALB"
+  default     = "60"
+}
 variable "use_cloudfront" {
   type        = bool
   description = "Optional; Creates a distribution with a default cache behavior. Default is `false`. If `true` and `service_fqdn` along with `hosted_zone_id` then the ALIAS record will point at this distrobution."

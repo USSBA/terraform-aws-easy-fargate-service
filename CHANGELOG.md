@@ -1,5 +1,10 @@
 # Changelog
 
+## v6.2.0
+
+* **NEW FEATURES**
+  * `alb_idle_timeout` - Configure how long your alb will wait for your container to respond
+
 ## v6.1.0
 
 * **NEW FEATURES**
