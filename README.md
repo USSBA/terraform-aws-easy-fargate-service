@@ -74,6 +74,7 @@ Features:
 * `route53_allow_overwrite` - Set the `allow_overwrite` property of the route53 record.  If `true`, there will be no `terraform import` necessary for pre-existing records. Default is `false`.
 * `alb_log_bucket_name` - The S3 bucket name to store the ALB access logs in.
 * `alb_log_prefix` - Prefix for each object created in ALB access log bucket.
+* `alb_idle_timeout` - Idle Timeout configuration for ALB.  Defaults to 60.  If behind a CloudFront, maximum request time is 60 seconds.  If not behind CloudFront, and your application has long-running requests, you might need to increase this timeout.
 * `use_cloudfront` - When `true` this module will attempt to provision a CF distribution. If a `certificate_arn` is used then both `hosted_zone_id` and `service_fqdn` will be required. Otherwise the default CF certificate is used. Default is `false`
 * `cloudfront_blacklist_geo_restrictions` - A set of alpha-2 country codes. Request originating from these countries will be blocked and all other will be allowed. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
 * `cloudfront_whitelist_geo_restrictions` - A set of alpha-2 country codes. Request originating from these countries will be allowed and all other will be blocked. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.

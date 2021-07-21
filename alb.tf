@@ -5,6 +5,7 @@ resource "aws_lb" "alb" {
   security_groups    = concat(var.alb_security_group_ids, [aws_security_group.alb_ingress.id])
   subnets            = local.public_subnet_ids_provided ? var.public_subnet_ids : local.private_subnet_ids_provided ? var.private_subnet_ids : data.aws_subnet_ids.default[0].ids
   ip_address_type    = "ipv4"
+  idle_timeout       = var.alb_idle_timeout
 
   dynamic "access_logs" {
     for_each = var.alb_log_bucket_name != "" ? ["enabled"] : []
