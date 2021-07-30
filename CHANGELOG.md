@@ -1,5 +1,10 @@
 # Changelog
 
+## v6.3.0
+
+* **NEW FEATURES**
+  * `ipv6` - Swap your ALB to use ipv6, and create an AAAA record (if needed)
+
 ## v6.2.0
 
 * **NEW FEATURES**
