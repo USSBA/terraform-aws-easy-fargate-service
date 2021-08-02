@@ -8,6 +8,7 @@ resource "aws_security_group" "alb_ingress" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = var.ipv6 ? ["::/0"] : []
   }
   tags = merge(var.tags, var.tags_alb, var.tags_security_group)
 }
@@ -23,4 +24,5 @@ resource "aws_security_group_rule" "alb_ingress" {
   protocol          = "tcp"
   type              = "ingress"
   cidr_blocks       = local.is_internal && var.vpc_id != "" ? [data.aws_vpc.other[0].cidr_block] : ["0.0.0.0/0"]
+  ipv6_cidr_blocks       = var.ipv6 ? ( local.is_internal && var.vpc_id != "" ? [data.aws_vpc.other[0].cidr_block] : ["::/0"] ) : []
 }

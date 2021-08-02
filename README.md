@@ -84,6 +84,7 @@ Features:
 * `cloudfront_log_bucket_name` - The S3 bucket name to store the CF access logs in. By default no logs will be stored.
 * `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
 * `listeners` - The ALB listener port configuration. By default port 80 will be forwarded unless a certificate is provided then port 80 will redirect to port 443 which will then be forwarded. Here are some [examples](./examples/listener/main.tf) of listener configurations.
+* `ipv6` - Boolean to enable ipv6 on the ALB and Route53.  Ensure your VPC is configured to be ipv6 compatible before enabling.  Defaults to `false`.
 
 ##### Tagging
 

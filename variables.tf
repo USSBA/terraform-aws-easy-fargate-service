@@ -340,3 +340,9 @@ variable "wait_for_steady_state" {
   description = "Optional; Configure terraform to wait for ECS service to be deployed and stable before terraform finishes.  Note that Fargate deployments can take a remarkably long time to reach a steady state, and thus your terraform deployment times will increase by a few minutes.  Defaults to false"
   default     = false
 }
+
+variable "ipv6" {
+  type        = bool
+  description = "Optional; Enable the loadbalancer to accept IPv6 requests.  Only enable this if your VPC is configured to use IPv6.  Defaults to false"
+  default     = false
+}
