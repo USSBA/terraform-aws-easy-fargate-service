@@ -1,5 +1,12 @@
 # Changelog
 
+## v6.4.0
+
+* **NEW FEATURES**
+  * `lights_on_schedule_expr` - Expression that will trigger an event to restore max/min capacity back to configured settings
+  * `lights_off_schedule_expr` - Expression that will trigger an event to set max/min capacity to zero
+  * `schedule_timezone` - IANA Timezone in which to base `at` and `cron` schedule expressions
+
 ## v6.3.0
 
 * **NEW FEATURES**
