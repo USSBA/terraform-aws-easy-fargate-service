@@ -88,7 +88,7 @@ Features:
 
 ##### Non-Persistent Data Volumes
 
-* `nonpersistent_data_volumes` - A list of strings representing volumes names of non-persistent data volumes.  Defaults to `[]`.
+* `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
 
 ##### Lights On/Off
 

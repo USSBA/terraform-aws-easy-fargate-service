@@ -2,7 +2,7 @@
 
 ## v6.5.0
 * **NEW FEATURE**
-  * `nonpersistent_data_volumes` - A list of strings representing non-persistent data volumes that can be used within container defintions
+  * `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
 
 ## v6.4.0
 

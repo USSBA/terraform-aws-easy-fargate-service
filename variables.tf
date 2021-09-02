@@ -225,6 +225,17 @@ variable "efs_configs" {
   default     = []
 }
 
+# non-persistent data volumes
+variable "nonpersistent_volume_configs" {
+  type = list(object({
+    volume_name    = string
+    container_name = string
+    container_path = string
+  }))
+  description = "Optional; List of {volume_name, container_name, container_path} non-persistent volumes."
+  default     = []
+}
+
 # Networking
 variable "vpc_id" {
   type        = string
@@ -313,12 +324,6 @@ variable "cloudfront_origin_custom_headers" {
   default     = []
 }
 
-# non-persistent data volumes
-variable "nonpersistent_data_volumes" {
-  type        = list(string)
-  description = "Optional; A list of string names representing non-persistant data volumes; default is []"
-  default     = []
-}
 
 # Tags
 variable "tags" {

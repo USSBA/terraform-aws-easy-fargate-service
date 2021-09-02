@@ -16,6 +16,15 @@ locals {
     readOnly      = false
   } if config.container_name == name] }
 
+  nonpersistent_volumes = distinct(var.nonpersistent_volume_configs.*.volume_name)
+
+  nonpersistent_container_names = distinct(var.nonpersistent_volume_configs.*.container_name)
+  nonpersistent_mountpoints = { for name in local.nonpersistent_container_names : name => [for config in var.nonpersistent_volume_configs : {
+    containerPath = config.container_path
+    sourceVolume  = config.volume_name
+    readOnly      = try(config.read_only, false)
+  } if config.container_name == name] }
+
   container_definitions = var.container_definitions
 
   container_definitions_with_defaults = [for container_definition in local.container_definitions : merge(
@@ -35,7 +44,10 @@ locals {
         }
       },
       stopTimeout = 5
-      mountPoints = try(local.efs_mountpoints[container_definition.name], [])
+      mountPoints = concat(
+        try(local.efs_mountpoints[container_definition.name], []),
+        try(local.nonpersistent_mountpoints[container_definition.name], [])
+      )
     },
   container_definition)]
 }
@@ -65,7 +77,7 @@ resource "aws_ecs_task_definition" "fargate" {
 
   dynamic "volume" {
     iterator = volume
-    for_each = var.nonpersistent_data_volumes
+    for_each = local.nonpersistent_volumes
     content {
       name = volume.value
     }
