@@ -86,6 +86,16 @@ Features:
 * `listeners` - The ALB listener port configuration. By default port 80 will be forwarded unless a certificate is provided then port 80 will redirect to port 443 which will then be forwarded. Here are some [examples](./examples/listener/main.tf) of listener configurations.
 * `ipv6` - Boolean to enable ipv6 on the ALB and Route53.  Ensure your VPC is configured to be ipv6 compatible before enabling.  Defaults to `false`.
 
+##### Non-Persistent Data Volumes
+
+* `nonpersistent_data_volumes` - A list of strings representing volumes names of non-persistent data volumes.  Defaults to `[]`.
+
+##### Lights On/Off
+
+* `lights_on_schedule_expr` - Expression that will trigger an event to restore max/min capacity back to configured settings.  Defaults to `""`.
+* `lights_off_schedule_expr` - Expression that will trigger an event to set max/min capacity to zero.  Defaults to `""`.
+* `schedule_timezone` - IANA Timezone in which to base `at` and `cron` schedule expressions.  Defaults to `"UTC"`.
+
 ##### Tagging
 
 All tags are optional maps of key-value pairs, and default to empty

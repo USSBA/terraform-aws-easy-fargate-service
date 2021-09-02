@@ -62,4 +62,12 @@ resource "aws_ecs_task_definition" "fargate" {
       }
     }
   }
+
+  dynamic "volume" {
+    iterator = volume
+    for_each = var.nonpersistent_data_volumes
+    content {
+      name = volume.value
+    }
+  }
 }

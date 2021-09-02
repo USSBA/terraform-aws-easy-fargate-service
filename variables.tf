@@ -313,6 +313,13 @@ variable "cloudfront_origin_custom_headers" {
   default     = []
 }
 
+# non-persistent data volumes
+variable "nonpersistent_data_volumes" {
+  type        = list(string)
+  description = "Optional; A list of string names representing non-persistant data volumes; default is []"
+  default     = []
+}
+
 # Tags
 variable "tags" {
   type        = map(any)
@@ -364,4 +371,3 @@ variable "tags_iam_role" {
   description = "Optional; Map of key-value tags to apply to IAM Roles"
   default     = {}
 }
-

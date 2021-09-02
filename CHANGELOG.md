@@ -1,5 +1,9 @@
 # Changelog
 
+## v6.5.0
+* **NEW FEATURE**
+  * `nonpersistent_data_volumes` - A list of strings representing non-persistent data volumes that can be used within container defintions
+
 ## v6.4.0
 
 * **NEW FEATURES**
