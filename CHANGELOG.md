@@ -1,5 +1,9 @@
 # Changelog
 
+## v6.5.0
+* **NEW FEATURE**
+  * `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
+
 ## v6.4.0
 
 * **NEW FEATURES**
