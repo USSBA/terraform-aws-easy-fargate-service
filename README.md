@@ -11,6 +11,7 @@ Features:
 * Looks up Default VPC/Subnets/etc unless told otherwise
 * Supports EFS and WAF
 * Supports multiple containers
+* Scheduled on/off
 
 ## Usage
 
@@ -32,7 +33,6 @@ Features:
 ##### Fargate Task and Service Configuration
 
 * `cluster_name` - The name of the ECS cluster where the Fargate service will run. Default is the default AWS cluster.
-* `efs_configs` - List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
 * `enable_execute_command` - Enable executing command inside a container running in Fargate service. Default is false.
 * `log_group_name` - The name of the log group. By default the `family` variable will be used.
 * `log_group_retention_in_days` - The number of days to retain the log group. By default logs will never expire.
@@ -42,6 +42,10 @@ Features:
 * `container_port` - Port the container listens on. Default is `80` (only valid with single container configurations, if using more then one container the port will need to be defined with your container definitions).
 * `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
 * `task_policy_json` - A JSON formatted IAM policy providing the running container with permissions.  By default, no permissions granted.
+
+##### Container volume ocnfiguration
+* `efs_configs` - List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
+* `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
 
 ##### Deployment and Scaling Configuration
 * `desired_capacity` - The desired number of containers running in the service. Default is `1`.
@@ -86,15 +90,11 @@ Features:
 * `listeners` - The ALB listener port configuration. By default port 80 will be forwarded unless a certificate is provided then port 80 will redirect to port 443 which will then be forwarded. Here are some [examples](./examples/listener/main.tf) of listener configurations.
 * `ipv6` - Boolean to enable ipv6 on the ALB and Route53.  Ensure your VPC is configured to be ipv6 compatible before enabling.  Defaults to `false`.
 
-##### Non-Persistent Data Volumes
-
-* `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
-
 ##### Lights On/Off
 
-* `lights_on_schedule_expr` - Expression that will trigger an event to restore max/min capacity back to configured settings.  Defaults to `""`.
-* `lights_off_schedule_expr` - Expression that will trigger an event to set max/min capacity to zero.  Defaults to `""`.
-* `schedule_timezone` - IANA Timezone in which to base `at` and `cron` schedule expressions.  Defaults to `"UTC"`.
+* `lights_on_schedule_expr` - Expression that will trigger an event to restore max/min capacity back to configured settings.  Defaults to `""`.  See [Application AutoScaling Schedule](https://docs.aws.amazon.com/autoscaling/application/APIReference/API_ScheduledAction.html#API_ScheduledAction_Contents) for details.
+* `lights_off_schedule_expr` - Expression that will trigger an event to set max/min capacity to zero.  Defaults to `""`. See [Application AutoScaling Schedule](https://docs.aws.amazon.com/autoscaling/application/APIReference/API_ScheduledAction.html#API_ScheduledAction_Contents) for details
+* `schedule_timezone` - IANA Timezone in which to base `at` and `cron` schedule expressions.  Defaults to `"UTC"`. See [Time Zone List](https://www.joda.org/joda-time/timezones.html)
 
 ##### Tagging
 
