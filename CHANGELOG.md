@@ -1,5 +1,16 @@
 # Changelog
 
+## v6.6.0
+* **NEW FEATURE**
+  * Supports Regional (LoadBalancer) based WAFv2.
+  * Adds `global_waf_acl` and `regional_waf_acl` vars
+* **DEPRECATION NOTICE**
+  * `regional_waf_acl_id` has been replaced with `regional_waf_acl`.  Eventually, `regional_waf_acl_id` will be removed.
+     Until then, if both vars are populated, `regional_waf_acl` will be used.
+  * `global_waf_acl_id` has been replaced with `global_waf_acl`.  Eventually, `global_waf_acl_id` will be removed.
+     Until then, if both vars are populated, `global_waf_acl` will be used.
+
+
 ## v6.5.0
 * **NEW FEATURE**
   * `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
