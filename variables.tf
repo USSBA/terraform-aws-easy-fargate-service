@@ -271,12 +271,22 @@ variable "alb_security_group_ids" {
 }
 variable "global_waf_acl_id" {
   type        = string
-  description = "Optional; Global Web Application Firewall ID that will be applied to the CloudFront distribution."
+  description = "DEPRECATED, use 'global_waf_acl'.  This field will be ignored if global_waf_acl is provided."
+  default     = ""
+}
+variable "global_waf_acl" {
+  type        = string
+  description = "Optional; Global Web Application Firewall ID that will be applied to the CloudFront distribution. For wafv1, provide the WAF ID.  For WAFv2 provide the ARN."
   default     = ""
 }
 variable "regional_waf_acl_id" {
   type        = string
-  description = "Optional; Regional Web Application Firewall ID that will be applied to the Application Load Balancer."
+  description = "DEPRECATED, use 'regional_waf_acl'.  This field will be ignored if regional_waf_acl is provided."
+  default     = ""
+}
+variable "regional_waf_acl" {
+  type        = string
+  description = "Optional; Regional Web Application Firewall identifier.  For wafv1, provide the WAF ID.  For WAFv2 provide the ARN."
   default     = ""
 }
 

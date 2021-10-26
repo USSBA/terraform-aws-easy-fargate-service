@@ -5,7 +5,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   enabled         = true
   is_ipv6_enabled = true
   price_class     = "PriceClass_100"
-  web_acl_id      = length(var.global_waf_acl_id) == 0 ? null : var.global_waf_acl_id
+  web_acl_id      = length(local.waf_global_identifier) == 0 ? null : local.waf_global_identifier
   tags            = merge(var.tags, var.tags_cloudfront)
   restrictions {
     geo_restriction {
