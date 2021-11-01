@@ -29,5 +29,5 @@ locals {
   waf_regional_identifier     = length(var.regional_waf_acl) != 0 ? var.regional_waf_acl : var.regional_waf_acl_id
   waf_regional                = length(local.waf_regional_identifier) != 0
   wafv1_regional              = local.waf_regional && substr(local.waf_regional_identifier, 0, 4) != "arn:"
-  wafv2_regional              = !local.wafv1_regional
+  wafv2_regional              = local.waf_regional && !local.wafv1_regional
 }

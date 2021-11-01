@@ -1,5 +1,9 @@
 # Changelog
 
+## v6.6.1
+* **BUG FIX**
+  * Fix situation where no waf is provided
+
 ## v6.6.0
 * **NEW FEATURE**
   * Supports Regional (LoadBalancer) based WAFv2.
