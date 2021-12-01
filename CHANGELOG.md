@@ -1,5 +1,11 @@
 # Changelog
 
+## v6.7.0
+* **NEW FEATURE**
+  * Now supports multiple certificates for https listeners
+  * Adds `certificate_arns` var in support of this
+  * Deprecates `certificate_arn` var
+
 ## v6.6.1
 * **BUG FIX**
   * Fix situation where no waf is provided
