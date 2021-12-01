@@ -1,6 +1,6 @@
 module "my-ez-fargate-efs" {
   #source             = "USSBA/easy-fargate-service/aws"
-  #version            = "~> 3.0"
+  #version            = "~> 6.0"
   source         = "../../"
   family         = "ez-fargate-svc-efs"
   task_cpu       = "1024"

@@ -30,4 +30,10 @@ locals {
   waf_regional                = length(local.waf_regional_identifier) != 0
   wafv1_regional              = local.waf_regional && substr(local.waf_regional_identifier, 0, 4) != "arn:"
   wafv2_regional              = local.waf_regional && !local.wafv1_regional
+  certificate_arns            = concat(var.certificate_arns, var.certificate_arn != "" ? [var.certificate_arn] : [])
+  cert_provided               = length(local.certificate_arns) > 0
+  certs_provided              = length(local.certificate_arns) > 1
+  additional_certificate_arns = try(slice(local.certificate_arns, 1, length(local.certificate_arns)), [])
+  additional_certificate_objs = [ for cert in local.additional_certificate_arns : { cert_arn = cert, cert_name = regex("[^/]+$",cert) } ]
+  listener_provided           = length(var.listeners) > 0
 }

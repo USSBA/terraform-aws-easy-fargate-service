@@ -41,6 +41,7 @@ variable "deregistration_delay" {
   default     = 20
 }
 variable "listeners" {
+  type        = any
   description = "Optional; The ALB listener configuration."
   default     = []
 }
@@ -298,8 +299,13 @@ variable "hosted_zone_id" {
 }
 variable "certificate_arn" {
   type        = string
-  description = "Optional; A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http."
+  description = "Optional; DEPRECATED, use certificate_arns. A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http."
   default     = ""
+}
+variable "certificate_arns" {
+  type        = list
+  description = "Optional; A list of certificate ARNs being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http."
+  default     = []
 }
 variable "route53_allow_overwrite" {
   type        = bool
