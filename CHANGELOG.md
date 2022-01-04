@@ -1,5 +1,10 @@
 # Changelog
 
+## v6.8.0
+* **NEW FEATURE**
+  * Now supports load balancer sticky sessions
+  * Adds `alb_sticky_duration` and `alb_sticky_cookie_name` in support of this
+
 ## v6.7.0
 * **NEW FEATURE**
   * Now supports multiple certificates for https listeners

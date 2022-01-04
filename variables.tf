@@ -50,6 +50,16 @@ variable "ipv6" {
   description = "Optional; Enable the loadbalancer to accept IPv6 requests.  Only enable this if your VPC is configured to use IPv6.  Defaults to false"
   default     = false
 }
+variable "alb_sticky_duration" {
+  type        = number
+  description = "Optional; Enables ALB sticky sessions and sets the time to the value; default is disabled"
+  default     = 1
+}
+variable "alb_sticky_cookie_name" {
+  type        = string
+  description = "Optional; Sets the ALB sticky type to app_cookie and the cookie name to the value; default is empty, which sets sticky type to lb_cookie"
+  default     = ""
+}
 
 # Application Load Balancer Health Checks
 variable "health_check_path" {
@@ -303,7 +313,7 @@ variable "certificate_arn" {
   default     = ""
 }
 variable "certificate_arns" {
-  type        = list
+  type        = list(any)
   description = "Optional; A list of certificate ARNs being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http."
   default     = []
 }

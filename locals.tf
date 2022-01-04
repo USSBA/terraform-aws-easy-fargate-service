@@ -34,6 +34,6 @@ locals {
   cert_provided               = length(local.certificate_arns) > 0
   certs_provided              = length(local.certificate_arns) > 1
   additional_certificate_arns = try(slice(local.certificate_arns, 1, length(local.certificate_arns)), [])
-  additional_certificate_objs = [ for cert in local.additional_certificate_arns : { cert_arn = cert, cert_name = regex("[^/]+$",cert) } ]
+  additional_certificate_objs = [for cert in local.additional_certificate_arns : { cert_arn = cert, cert_name = regex("[^/]+$", cert) }]
   listener_provided           = length(var.listeners) > 0
 }

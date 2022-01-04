@@ -33,10 +33,10 @@ resource "aws_lb_target_group" "alb" {
 
   lifecycle { create_before_destroy = true }
 
-  # apparently there is a bug with NLB stickiness right now
-  # and this is the work around, not sure how it will affect ALBs
-  #stickiness {
-  #  enabled = false
-  #  type    = "lb_cookie"
-  #}
+  stickiness {
+    enabled         = var.alb_sticky_duration > 1
+    cookie_duration = var.alb_sticky_duration
+    type            = length(var.alb_sticky_cookie_name) > 0 ? "app_cookie" : "lb_cookie"
+    cookie_name     = length(var.alb_sticky_cookie_name) > 0 ? var.alb_sticky_cookie_name : null
+  }
 }
