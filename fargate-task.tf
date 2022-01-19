@@ -62,6 +62,10 @@ resource "aws_ecs_task_definition" "fargate" {
   requires_compatibilities = ["FARGATE"]
   tags                     = merge(var.tags, var.tags_ecs, var.tags_ecs_task_definition)
 
+  runtime_platform {
+    cpu_architecture = var.task_cpu_architecture
+  }
+
   dynamic "volume" {
     iterator = volume
     for_each = local.efs_volumes

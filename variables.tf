@@ -18,6 +18,11 @@ variable "task_memory" {
   description = "Optional; A fargate compliant container memory value."
   default     = 512
 }
+variable "task_cpu_architecture" {
+  type        = string
+  description = "Optional; The task CPU architecture; Defaults to X86_64."
+  default     = "X86_64"
+}
 variable "platform_version" {
   type        = string
   description = "Optional; The ECS backend platform version; Defaults to 1.4.0 so EFS is supported."
