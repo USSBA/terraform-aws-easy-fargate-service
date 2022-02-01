@@ -129,6 +129,11 @@ variable "lights_off_schedule_expr" {
   description = "Optional; Expression of [at(yyyy-mm-ddThh:mm:ss), rate(:value :unit), or cron(:minutes :hours :dayOfMonth :month :dayOfWeek :year)];  Default is no schedule"
   default     = ""
 }
+variable "lights_off_desired_capacity" {
+  type        = number
+  description = "Optional; The number of containers to leave running during the lightsOff period. Default is 0."
+  default     = 0
+}
 variable "schedule_timezone" {
   type        = string
   description = "Optional: the canonical names of the IANA time zones supported by Joda-Time;  Default is UTC"

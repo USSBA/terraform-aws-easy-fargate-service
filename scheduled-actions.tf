@@ -22,8 +22,7 @@ resource "aws_appautoscaling_scheduled_action" "lights_off" {
   timezone           = var.schedule_timezone
 
   scalable_target_action {
-    min_capacity = 0
-    max_capacity = 0
+    min_capacity = var.lights_off_desired_capacity
+    max_capacity = var.lights_off_desired_capacity
   }
 }
-

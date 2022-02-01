@@ -1,5 +1,9 @@
 # Changelog
 
+## v6.9.0
+* **UPDATE FEATURE**
+  * Adds `lights_off_desired_capacity` in order to keep a set number of containers running durings this period of time rather then a static zero.
+
 ## v6.8.0
 * **NEW FEATURE**
   * Now supports load balancer sticky sessions
