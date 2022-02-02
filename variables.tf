@@ -119,24 +119,20 @@ variable "scaling_threshold" {
   description = "Optional; The percentage in which the scaling metric will trigger a scaling event. Default is no scaling."
   default     = -1
 }
-variable "lights_on_schedule_expr" {
-  type        = string
-  description = "Optional; Expression of [at(yyyy-mm-ddThh:mm:ss), rate(:value :unit), or cron(:minutes :hours :dayOfMonth :month :dayOfWeek :year)];  Default is no schedule"
-  default     = ""
+variable "scheduled_actions" {
+  type = list(
+    object({
+      expression    = string
+      min_capacity  = number
+      max_capacity  = number
+    })
+  )
+  description = "Optional; A list of scheduled actions [{expression = :string, min_capacity = :int, max_capacity = :int},...]; Expressions: [at(yyyy-mm-ddThh:mm:ss), rate(:value :unit), or cron(:minutes :hours :dayOfMonth :month :dayOfWeek :year)]; Default is []"
+  default = []
 }
-variable "lights_off_schedule_expr" {
+variable "scheduled_actions_timezone" {
   type        = string
-  description = "Optional; Expression of [at(yyyy-mm-ddThh:mm:ss), rate(:value :unit), or cron(:minutes :hours :dayOfMonth :month :dayOfWeek :year)];  Default is no schedule"
-  default     = ""
-}
-variable "lights_off_desired_capacity" {
-  type        = number
-  description = "Optional; The number of containers to leave running during the lightsOff period. Default is 0."
-  default     = 0
-}
-variable "schedule_timezone" {
-  type        = string
-  description = "Optional: the canonical names of the IANA time zones supported by Joda-Time;  Default is UTC"
+  description = "Optional: The canonical name of the IANA time zone supported by Joda-Time;  Default is \"UTC\""
   default     = "UTC"
 }
 

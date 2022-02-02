@@ -1,5 +1,13 @@
 # Changelog
 
+## v7.00
+* **NEW FEATURE**
+  * Adds `scheduled_actions` allowing any number of actions to be configured
+    [{expression = "cron(0 12 * * ? *), max_capacity = 200, min_capacity = 25"},...]
+  * Renamed variable `schedule_timezone` to `scheduled_actions_timezone`
+  **RETIRED FEATURE**
+  * The lights on/off feature has been removed entirely
+
 ## v6.9.0
 * **UPDATE FEATURE**
   * Adds `lights_off_desired_capacity` in order to keep a set number of containers running durings this period of time rather then a static zero.
