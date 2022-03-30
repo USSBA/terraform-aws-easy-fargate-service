@@ -39,6 +39,7 @@ Features:
 * `log_group_region` - The region where the log group exists. By default the current region will be used.
 * `task_cpu` - How much CPU should be reserved for the container (in aws cpu-units). Default is `256`.
 * `task_memory` - How much Memory should be reserved for the container (in MB). Default is `512`.
+* `task_cpu_architecture` - The task CPU architecture (e.g. `X86_64`, `ARM64`); Only supported on platform version `1.4.0`.
 * `container_port` - Port the container listens on. Default is `80` (only valid with single container configurations, if using more then one container the port will need to be defined with your container definitions).
 * `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
 * `task_policy_json` - A JSON formatted IAM policy providing the running container with permissions.  By default, no permissions granted.

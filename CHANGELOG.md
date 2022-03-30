@@ -1,6 +1,10 @@
 # Changelog
 
-## v7.00
+## v7.0.1
+* **UPDATE**
+  * Adds new module configuration variable `task_cpu_architecture`
+
+## v7.0.0
 * **NEW FEATURE**
   * Adds `scheduled_actions` allowing any number of actions to be configured
     [{expression = "cron(0 12 * * ? *), max_capacity = 200, min_capacity = 25"},...]
