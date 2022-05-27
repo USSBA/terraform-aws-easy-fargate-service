@@ -1,5 +1,11 @@
 # Changelog
 
+## v7.1.0
+* **NEW FEATURE**
+  * Adds a new variable called `cloudfront_header` that when provided changes the `default_action` of the 443 listener
+    to a fixed response of `403 Access denied` and places a rule at priority 1 that validates the header before permitting
+    traffic to the origin
+
 ## v7.0.1
 * **UPDATE**
   * Adds new module configuration variable `task_cpu_architecture`

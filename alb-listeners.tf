@@ -9,8 +9,6 @@ locals {
   # - if a certificate(s) is provided then port 80 will redirect traffic to port 443 which will forward traffic to the target
   normalized_listeners = [for listener in var.listeners : merge({ ssl_policy = null }, listener)]
   listeners            = !local.listener_provided && !local.cert_provided ? [local.listener.http] : !local.listener_provided && local.cert_provided ? [local.listener.http_redirect, local.listener.https] : local.normalized_listeners
-
-  #listeners = !local.listener_provided && !local.cert_provided ? [local.listener.http] : [local.listener.http_redirect, local.listener.https]
 }
 
 resource "aws_lb_listener" "http_redirects" {
@@ -95,9 +93,40 @@ resource "aws_lb_listener" "https_forwards" {
   protocol          = each.value.protocol
   ssl_policy        = try(each.value.ssl_policy, "ELBSecurityPolicy-TLS-1-2-2017-01")
   certificate_arn   = local.certificate_arns[0]
-  default_action {
+
+  dynamic "default_action" {
+    for_each = contains(keys(var.cloudfront_header), "key") ? ["fixed-response"] : ["forward"]
+    content {
+      type             = default_action.value
+      target_group_arn = default_action.value == "forward" ? aws_lb_target_group.alb.arn : null
+
+      dynamic "fixed_response" {
+        for_each = default_action.value == "fixed-response" ? [1] : []
+        content {
+          content_type = "text/plain"
+          message_body = "Access denied"
+          status_code  = "403"
+        }
+      }
+    }
+  }
+}
+resource "aws_lb_listener_rule" "http_forward_custom_header" {
+  count = contains(keys(var.cloudfront_header), "key") ? 1 : 0
+
+  priority     = 1
+  listener_arn = aws_lb_listener.https_forwards["443"].arn
+
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb.arn
+  }
+
+  condition {
+    http_header {
+      http_header_name = var.cloudfront_header.key
+      values           = [var.cloudfront_header.value]
+    }
   }
 }
 locals {
