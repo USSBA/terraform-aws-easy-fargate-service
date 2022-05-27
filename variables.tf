@@ -50,6 +50,11 @@ variable "listeners" {
   description = "Optional; The ALB listener configuration."
   default     = []
 }
+variable "cloudfront_header" {
+  type        = any
+  description = "Optional; Custom header associated with CloudFront distribution origin requests. { key = \"header-name\", value = \"header-value\""
+  default     = {}
+}
 variable "ipv6" {
   type        = bool
   description = "Optional; Enable the loadbalancer to accept IPv6 requests.  Only enable this if your VPC is configured to use IPv6.  Defaults to false"
@@ -127,13 +132,13 @@ variable "scaling_threshold" {
 variable "scheduled_actions" {
   type = list(
     object({
-      expression    = string
-      min_capacity  = number
-      max_capacity  = number
+      expression   = string
+      min_capacity = number
+      max_capacity = number
     })
   )
   description = "Optional; A list of scheduled actions [{expression = :string, min_capacity = :int, max_capacity = :int},...]; Expressions: [at(yyyy-mm-ddThh:mm:ss), rate(:value :unit), or cron(:minutes :hours :dayOfMonth :month :dayOfWeek :year)]; Default is []"
-  default = []
+  default     = []
 }
 variable "scheduled_actions_timezone" {
   type        = string

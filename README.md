@@ -160,6 +160,10 @@ module "my-ez-fargate-service" {
   hosted_zone_id     = "Z000000000000"
   service_fqdn       = "www.cheeseburger.com"
   use_cloudfront     = true
+  cloudfront_header = {
+    key   = "x-header-name"
+    value = "12345678-90ab-cdef-1234-567890abcdef"
+  }
   container_environment = [
     {
       name  = "FOO"
