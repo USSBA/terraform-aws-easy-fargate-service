@@ -7,9 +7,12 @@ data "aws_vpc" "default" {
   default = true
 }
 
-data "aws_subnet_ids" "default" {
-  count  = local.use_default_subnets ? 1 : 0
-  vpc_id = local.vpc_id
+data "aws_subnets" "default" {
+  count = local.use_default_subnets ? 1 : 0
+  filter {
+    name   = "vpc-id"
+    values = [local.vpc_id]
+  }
 }
 
 data "aws_vpc" "other" {

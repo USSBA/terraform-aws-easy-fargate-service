@@ -1,5 +1,11 @@
 # Changelog
 
+## v8.0.0
+* **UPDATE**
+  * Updated aws provider version from `>= 3.69, < 4.0` to `~> 4.0`
+  * Updated Terraform version from `>= 0.13` to `~> 1.0`
+  * Replaced deprecated `data "aws_subnet_ids"` with `data "aws_subnets"`
+
 ## v7.1.0
 * **NEW FEATURE**
   * Adds a new variable called `cloudfront_header` that when provided changes the `default_action` of the 443 listener
@@ -20,7 +26,7 @@
 
 ## v6.9.0
 * **UPDATE FEATURE**
-  * Adds `lights_off_desired_capacity` in order to keep a set number of containers running durings this period of time rather then a static zero.
+  * Adds `lights_off_desired_capacity` in order to keep a set number of containers running durings this period of time rather then a static zero
 
 ## v6.8.0
 * **NEW FEATURE**
@@ -42,10 +48,10 @@
   * Supports Regional (LoadBalancer) based WAFv2.
   * Adds `global_waf_acl` and `regional_waf_acl` vars
 * **DEPRECATION NOTICE**
-  * `regional_waf_acl_id` has been replaced with `regional_waf_acl`.  Eventually, `regional_waf_acl_id` will be removed.
-     Until then, if both vars are populated, `regional_waf_acl` will be used.
-  * `global_waf_acl_id` has been replaced with `global_waf_acl`.  Eventually, `global_waf_acl_id` will be removed.
-     Until then, if both vars are populated, `global_waf_acl` will be used.
+  * `regional_waf_acl_id` has been replaced with `regional_waf_acl`.  Eventually, `regional_waf_acl_id` will be removed
+     Until then, if both vars are populated, `regional_waf_acl` will be used
+  * `global_waf_acl_id` has been replaced with `global_waf_acl`.  Eventually, `global_waf_acl_id` will be removed
+     Until then, if both vars are populated, `global_waf_acl` will be used
 
 
 ## v6.5.0
