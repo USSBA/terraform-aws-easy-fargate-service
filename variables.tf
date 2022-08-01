@@ -242,6 +242,10 @@ variable "efs_configs" {
     file_system_id = string
     root_directory = string
     container_path = string
+    authorization_config = object({
+      access_point_id = string
+      iam = string
+    }) 
   }))
   description = "Optional; List of {container_name, file_system_id, root_directory, container_path} EFS mounts."
   default     = []
@@ -412,4 +416,8 @@ variable "tags_iam_role" {
   type        = map(any)
   description = "Optional; Map of key-value tags to apply to IAM Roles"
   default     = {}
+}
+
+output "efs_conf" {
+  value = var.efs_configs
 }
