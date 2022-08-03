@@ -23,6 +23,3 @@ output "cloudfront" {
   value = try(aws_cloudfront_distribution.distribution[0], null)
 }
 
-output "efs_configs" {
-  value = var.efs_configs
-}

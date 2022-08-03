@@ -96,6 +96,3 @@ resource "aws_ecs_task_definition" "fargate" {
     }
   }
 }
-output "auth_config" {
-  value = local.efs_volumes
-}

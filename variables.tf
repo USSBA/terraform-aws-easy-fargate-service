@@ -417,7 +417,3 @@ variable "tags_iam_role" {
   description = "Optional; Map of key-value tags to apply to IAM Roles"
   default     = {}
 }
-
-output "efs_conf" {
-  value = var.efs_configs
-}
