@@ -5,7 +5,7 @@ locals {
     vol_id         = "${config.file_system_id}_${md5(config.root_directory)}"
     file_system_id = config.file_system_id
     root_directory = config.root_directory
-    authorization_config = config.authorization_config 
+    authorization_config = try(config.authorization_config, null) 
   }])
 
   # Craft the container mountpoint config. We need one element per mountpoint within
@@ -80,10 +80,13 @@ resource "aws_ecs_task_definition" "fargate" {
         file_system_id     = volume.value.file_system_id
         root_directory     = volume.value.root_directory
         transit_encryption = "ENABLED"
-        authorization_config {
-          access_point_id = volume.value.authorization_config.access_point_id
-          iam = volume.value.authorization_config.iam
+        dynamic "authorization_config" {
+          for_each = try(volume.value.authorization_config.access_point_id, null) != null && try(volume.value.authorization_config.access_point_id, null) != null ? [1] : []
+          content {
+            access_point_id = volume.value.authorization_config.access_point_id
+            iam = volume.value.authorization_config.iam
           }
+        }
       }
     }
   }
