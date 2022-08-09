@@ -81,7 +81,7 @@ resource "aws_ecs_task_definition" "fargate" {
         root_directory     = volume.value.root_directory
         transit_encryption = "ENABLED"
         dynamic "authorization_config" {
-          for_each = try(volume.value.authorization_config.access_point_id, null) != null && try(volume.value.authorization_config.access_point_id, null) != null ? [1] : []
+          for_each = try(volume.value.authorization_config.access_point_id, null) != null && try(volume.value.authorization_config.iam, null) != null ? [1] : []
           content {
             access_point_id = volume.value.authorization_config.access_point_id
             iam = volume.value.authorization_config.iam
