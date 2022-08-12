@@ -409,12 +409,12 @@ variable "tags_iam_role" {
   default     = {}
 }
 variable "iam_role_path" {
-  description = "Path attached to created iam roles"
+  description = "Optional; Path attached to created IAM roles"
   type        = string
   default     = null
 }
 variable "iam_role_permissions_boundary" {
-  description = "Permissions Boundary ARN attached to created IAM roles"
+  description = "Optional; Permissions Boundary ARN attached to created IAM roles"
   type        = string
   default     = null
 }
