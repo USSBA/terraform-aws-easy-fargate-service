@@ -45,6 +45,9 @@ resource "aws_iam_role" "ecs_execution" {
   name               = "${var.family}-exec-basic"
   assume_role_policy = data.aws_iam_policy_document.ecs_execution_principal.json
   tags               = merge(var.tags, var.tags_iam_role)
+
+  path                 = var.iam_role_path
+  permissions_boundary = var.iam_role_permissions_boundary
 }
 resource "aws_iam_role_policy" "ecs_execution" {
   name   = "${var.family}-exec-basic"
