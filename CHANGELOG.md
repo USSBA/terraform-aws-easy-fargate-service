@@ -1,7 +1,6 @@
 # Changelog
 
-## Unreleased
-
+## v8.1.0
 * **NEW FEATURE**
   * Adds `iam_role_path` and `iam_role_permissions_boundary` for additional IAM role configuration
 
