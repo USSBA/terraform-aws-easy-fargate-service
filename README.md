@@ -43,8 +43,10 @@ Features:
 * `container_port` - Port the container listens on. Default is `80` (only valid with single container configurations, if using more then one container the port will need to be defined with your container definitions).
 * `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
 * `task_policy_json` - A JSON formatted IAM policy providing the running container with permissions.  By default, no permissions granted.
+* `iam_role_path` - Path attached to created IAM roles
+* `iam_role_permissions_boundary` - Permissions Boundary ARN attached to created IAM roles
 
-##### Container volume ocnfiguration
+##### Container volume configuration
 * `efs_configs` - List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
 * `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
 

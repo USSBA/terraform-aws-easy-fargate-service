@@ -1,5 +1,9 @@
 # Changelog
 
+## v8.1.0
+* **NEW FEATURE**
+  * Adds `iam_role_path` and `iam_role_permissions_boundary` for additional IAM role configuration
+
 ## v8.0.0
 * **UPDATE**
   * Updated aws provider version from `>= 3.69, < 4.0` to `~> 4.0`
