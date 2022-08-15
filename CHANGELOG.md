@@ -1,8 +1,13 @@
 # Changelog
 
-## v8.1.0
+## v9.1.0
 * **NEW FEATURE**
   * Adds `iam_role_path` and `iam_role_permissions_boundary` for additional IAM role configuration
+
+## v9.0.0
+* **UPDATE**
+  * Added `authorization_config` to the `efs_configs` variable
+  * Changed `efs_configs` to `any` instead of `list(object)`
 
 ## v8.0.0
 * **UPDATE**
