@@ -62,9 +62,10 @@ module "easy_fargate_alb_sg" {
   tags = {
     ManagedBy = "Terraform"
   }
-  alb_security_group_ids = [aws_security_group.alb_sg.id]
-  alb_idle_timeout       = 300
-  wait_for_steady_state  = true
+  alb_security_group_ids         = [aws_security_group.alb_sg.id]
+  alb_idle_timeout               = 300
+  alb_drop_invalid_header_fields = true
+  wait_for_steady_state          = true
 }
 output "dev_connection_information" {
   value = <<-EOT

@@ -95,6 +95,7 @@ Features:
 * `ipv6` - Boolean to enable ipv6 on the ALB and Route53.  Ensure your VPC is configured to be ipv6 compatible before enabling.  Defaults to `false`.
 * `alb_sticky_duration` - Optional; Enables ALB sticky sessions and sets the time to the value; default is disabled
 * `alb_sticky_cookie_name` - Optional; Sets the ALB sticky type to app_cookie and the cookie name to the value; default is empty, which sets sticky type to lb_cookie
+* `alb_drop_invalid_header_fields` - Optional; Indicates whether HTTP headers with header fields that are not valid are removed by the load balancer (true) or routed to targets (false). The default is false. Elastic Load Balancing requires that message header names contain only alphanumeric characters and hyphens. Only valid for Load Balancers of type application.
 
 ##### Lights On/Off
 
