@@ -70,6 +70,11 @@ variable "alb_sticky_cookie_name" {
   description = "Optional; Sets the ALB sticky type to app_cookie and the cookie name to the value; default is empty, which sets sticky type to lb_cookie"
   default     = ""
 }
+variable "alb_drop_invalid_header_fields" {
+  type        = bool
+  description = "Optional; Indicates whether HTTP headers with header fields that are not valid are removed by the load balancer (true) or routed to targets (false). The default is false. Elastic Load Balancing requires that message header names contain only alphanumeric characters and hyphens. Only valid for Load Balancers of type application."
+  default     = false
+}
 
 # Application Load Balancer Health Checks
 variable "health_check_path" {

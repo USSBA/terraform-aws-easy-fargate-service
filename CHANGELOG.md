@@ -1,5 +1,9 @@
 # Changelog
 
+## v9.2.0
+* **NEW FEATURE**
+  * Adds `alb_drop_invalid_header_fields` to allow enabling this security feature of the ALB
+
 ## v9.1.0
 * **NEW FEATURE**
   * Adds `iam_role_path` and `iam_role_permissions_boundary` for additional IAM role configuration
