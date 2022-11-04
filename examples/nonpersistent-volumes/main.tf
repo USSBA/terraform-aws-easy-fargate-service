@@ -37,7 +37,7 @@ module "ez-fargate" {
     },
   ]
 
-  wait_for_steady_state       = true # Don't finish tf apply until containers are actually running (so the ALB link works immediately upon display)
+  wait_for_steady_state = true # Don't finish tf apply until containers are actually running (so the ALB link works immediately upon display)
 }
 
 output "alb_dns" {

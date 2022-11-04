@@ -23,12 +23,6 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
       - run: |
           terraform fmt -check -recursive
-          if [[ $? != 0 ]]; then
-            echo "FAILURE: terraform fmt -check -recursive"
-            exit 1
-          else
-            echo "SUCCESS: terraform fmt -check -recursive"
-          fi
 
   terraform-validate:
     runs-on: ubuntu-latest

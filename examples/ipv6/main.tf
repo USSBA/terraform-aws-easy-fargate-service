@@ -10,7 +10,7 @@
 
 ## Use the vpc module to create an IPv6 compatible vpc
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
   version = "~> 3.0"
 
   name = "ipv6-test"
@@ -20,17 +20,17 @@ module "vpc" {
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
 
-  enable_ipv6 = true
-  assign_ipv6_address_on_creation = true
+  enable_ipv6                                    = true
+  assign_ipv6_address_on_creation                = true
   private_subnet_assign_ipv6_address_on_creation = false
-  public_subnet_ipv6_prefixes   = [0, 1]
-  private_subnet_ipv6_prefixes  = [2, 3]
+  public_subnet_ipv6_prefixes                    = [0, 1]
+  private_subnet_ipv6_prefixes                   = [2, 3]
 
   enable_nat_gateway = true
   single_nat_gateway = true
 
   tags = {
-    Owner       = "easy-fargate-service/ipv6"
+    Owner = "easy-fargate-service/ipv6"
   }
 }
 
@@ -51,9 +51,9 @@ module "easy-fs-ipv6" {
 
   ipv6 = true
 
-  vpc_id = module.vpc.vpc_id
+  vpc_id             = module.vpc.vpc_id
   private_subnet_ids = module.vpc.private_subnets
-  public_subnet_ids = module.vpc.public_subnets
+  public_subnet_ids  = module.vpc.public_subnets
 }
 output "easy-fs-ipv6-alb-dns" {
   value = module.easy-fs-ipv6.alb_dns
