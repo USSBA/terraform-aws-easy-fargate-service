@@ -1,0 +1,35 @@
+# global configuration for all jobs
+# setting tests to only run on pull requests
+name: tests
+on: [pull_request]
+
+# sets the default shell for all jobs
+defaults:
+  run:
+    shell: bash
+
+# permissions can be set globally for jobs
+permissions:
+  actions: write
+  checks: read
+  contents: read
+  pull-requests: read
+
+jobs:
+  terraform-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v1
+      - run: |
+          terraform fmt -check -recursive
+
+  terraform-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v1
+      - run: |
+          echo "provider \"aws\" { region = \"us-east-1\" } " > tmp_provider.tf
+          terraform init -backend=false -input=false
+          terraform validate

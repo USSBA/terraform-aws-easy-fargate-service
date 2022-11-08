@@ -25,6 +25,6 @@ module "easy-fs-sticky-app-cookie" {
     }
   ]
 
-  alb_sticky_duration = 604800
+  alb_sticky_duration    = 604800
   alb_sticky_cookie_name = "foobar"
 }

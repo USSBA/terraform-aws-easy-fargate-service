@@ -242,7 +242,7 @@ variable "container_definitions" {
 
 # Elastic File System
 variable "efs_configs" {
-    type = any
+  type        = any
   description = "Optional; List of {container_name, file_system_id, root_directory, container_path} EFS mounts."
   default     = []
 }
