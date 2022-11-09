@@ -361,6 +361,12 @@ variable "cloudfront_origin_custom_headers" {
   default     = []
 }
 
+# AWS Shield Protection
+variable "enable_shield_protection" {
+  type        = bool
+  description = "Optional; Enables WAF shield protection on the Application Load Balancer. Default is false"
+  default     = false
+}
 
 # Tags
 variable "tags" {
