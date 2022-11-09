@@ -103,6 +103,12 @@ Features:
 * `lights_off_schedule_expr` - Expression that will trigger an event to set max/min capacity to zero.  Defaults to `""`. See [Application AutoScaling Schedule](https://docs.aws.amazon.com/autoscaling/application/APIReference/API_ScheduledAction.html#API_ScheduledAction_Contents) for details
 * `schedule_timezone` - IANA Timezone in which to base `at` and `cron` schedule expressions.  Defaults to `"UTC"`. See [Time Zone List](https://www.joda.org/joda-time/timezones.html)
 
+##### Shield Advanced Protection
+
+**NOTE:** This setting does not `enroll` your account into shield advanced and that is a requirement to use this feature! Please due your due dilligence before enabling shield advanced for your account or organization as it costs $3000 / per month
+
+* `enable_shield_protection` - Optional; Enables shield advanced protection on the Application Load Balancer. Default is false
+
 ##### Tagging
 
 All tags are optional maps of key-value pairs, and default to empty
