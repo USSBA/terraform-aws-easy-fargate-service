@@ -105,7 +105,7 @@ Features:
 
 ##### Shield Advanced Protection
 
-**NOTE:** This setting does not `enroll` your account into shield advanced and that is a requirement to use this feature! Please due your due dilligence before enabling shield advanced for your account or organization as it costs $3000 / per month
+**NOTE:** This setting does not `enroll` your account into shield advanced and that is a requirement to use this feature! Please do your due diligence before enabling shield advanced for your account or organization as it costs $3000 / per month
 
 * `enable_shield_protection` - Optional; Enables shield advanced protection on the Application Load Balancer. Default is false
 

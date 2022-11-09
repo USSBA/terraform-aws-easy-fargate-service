@@ -1,5 +1,9 @@
 # Changelog
 
+## v9.3.0
+* **NEW FEATURE**
+  * Adds `enable_shield_protection` to allow enabling this security feature to help add protection to Application Load Balancers.
+
 ## v9.2.0
 * **NEW FEATURE**
   * Adds `alb_drop_invalid_header_fields` to allow enabling this security feature of the ALB
