@@ -62,12 +62,12 @@ variable "ipv6" {
 }
 variable "alb_sticky_duration" {
   type        = number
-  description = "Optional; Enables ALB sticky sessions and sets the time to the value; default is disabled"
+  description = "By default, sticky sessions are disabled. Once a number value is provided, sticky sessions are enabled, and the provided number is used to determine sticky session's duration in seconds"
   default     = 1
 }
 variable "alb_sticky_cookie_name" {
   type        = string
-  description = "Optional; Sets the ALB sticky type to app_cookie and the cookie name to the value; default is empty, which sets sticky type to lb_cookie"
+  description = "By defualt sticky cookie type will be set to lb_cookie, and string will be empty. Once a cookie name is assgined to the value, the alb sticky type will be app_cookie"
   default     = ""
 }
 variable "alb_drop_invalid_header_fields" {
