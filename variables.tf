@@ -67,7 +67,7 @@ variable "alb_sticky_duration" {
 }
 variable "alb_sticky_cookie_name" {
   type        = string
-  description = "By defualt sticky cookie type will be set to lb_cookie, and string will be empty. Once a cookie name is assgined to the value, the alb sticky type will be app_cookie"
+  description = "By default a cookie type of lb_cookie will be used. Once assigned a string value a cookie type of app_cookie will be used. To enable sticky sessions please refer to variable alb_sticky_duration"
   default     = ""
 }
 variable "alb_drop_invalid_header_fields" {
