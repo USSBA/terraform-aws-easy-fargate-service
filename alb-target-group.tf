@@ -18,6 +18,10 @@ resource "aws_lb_target_group" "alb" {
   vpc_id               = local.vpc_id
   deregistration_delay = var.deregistration_delay
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   health_check {
     interval            = var.health_check_interval
     path                = var.health_check_path
@@ -31,12 +35,10 @@ resource "aws_lb_target_group" "alb" {
 
   tags = merge(var.tags, var.tags_alb, var.tags_alb_tg)
 
-  lifecycle { create_before_destroy = true }
-
   stickiness {
     enabled         = var.alb_sticky_duration > 1
     cookie_duration = var.alb_sticky_duration
-    type            = length(var.alb_sticky_cookie_name) > 0 ? "app_cookie" : "lb_cookie"
-    cookie_name     = length(var.alb_sticky_cookie_name) > 0 ? var.alb_sticky_cookie_name : null
+    type            = var.alb_sticky_cookie_type
+    cookie_name     = var.alb_sticky_cookie_name
   }
 }
