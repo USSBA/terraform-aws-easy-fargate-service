@@ -1,12 +1,16 @@
 # Changelog
 
-## v9.3.1
+## v9.3.2
 * **UPDATE**
   * Added the `alb_sticky_cookie_type` variable with default of `lb_cookie` for backwards compatibility.
 
-*  **FIX**
+* **FIX**
   * Problem - When transitioning from an `app_cookie` to an `lb_cookie` AWS seems persist the `cookie_name` which is causing Terraform to detect a change on every plan evaluation even though the `cookie_name` is irrelevant.
   * Solution - The ALB sticky cookie type is no longer based on the `alb_sticky_cookie_name` variable and can be passed to the module regardless of the cookie type. During a transition from `app_cookie` to `lb_cookie` you may need to keep the cookie name in place to prevent Terraform from detecting a state change.
+
+## v9.3.1
+  **UPDATE**
+  * Modified description of ALB sticky session variables.
 
 ## v9.3.0
 * **NEW FEATURE**
