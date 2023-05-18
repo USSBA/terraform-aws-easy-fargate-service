@@ -65,9 +65,14 @@ variable "alb_sticky_duration" {
   description = "By default, sticky sessions are disabled. Once a number value is provided, sticky sessions are enabled, and the provided number is used to determine sticky session's duration in seconds"
   default     = 1
 }
+variable "alb_sticky_cookie_type" {
+  type        = string
+  description = "By default a cookie type of lb_cookie will be used. Only lb_cookie and app_cookie are supported."
+  default     = "lb_cookie"
+}
 variable "alb_sticky_cookie_name" {
   type        = string
-  description = "By default a cookie type of lb_cookie will be used. Once assigned a string value a cookie type of app_cookie will be used. To enable sticky sessions please refer to variable alb_sticky_duration"
+  description = "Applicable only when app_cookie is configured. The sticky session cookie domain name used when the `app_cookie` type is used."
   default     = ""
 }
 variable "alb_drop_invalid_header_fields" {

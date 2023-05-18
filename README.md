@@ -94,7 +94,8 @@ Features:
 * `listeners` - The ALB listener port configuration. By default port 80 will be forwarded unless a certificate is provided then port 80 will redirect to port 443 which will then be forwarded. Here are some [examples](./examples/listener/main.tf) of listener configurations.
 * `ipv6` - Boolean to enable ipv6 on the ALB and Route53.  Ensure your VPC is configured to be ipv6 compatible before enabling.  Defaults to `false`.
 * `alb_sticky_duration` - By default, sticky sessions are disabled. Once a number value is provided, sticky sessions are enabled, and the provided number is used to determine sticky session's duration in seconds.
-* `alb_sticky_cookie_name` - By default a cookie type of lb_cookie will be used. Once assigned a string value a cookie type of app_cookie will be used. To enable sticky sessions please refer to variable alb_sticky_duration.
+* `alb_sticky_cookie_type` - By default a cookie type of `lb_cookie` will be used. Only `lb_cookie` and `app_cookie` are supported.
+* `alb_sticky_cookie_name` - Applicable only when `app_cookie` is configured. The sticky session cookie domain name used when the `app_cookie` type is used.
 * `alb_drop_invalid_header_fields` - Optional; Indicates whether HTTP headers with header fields that are not valid are removed by the load balancer (true) or routed to targets (false). The default is false. Elastic Load Balancing requires that message header names contain only alphanumeric characters and hyphens. Only valid for Load Balancers of type application.
 
 ##### Lights On/Off
