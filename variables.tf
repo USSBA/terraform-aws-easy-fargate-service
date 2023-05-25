@@ -25,8 +25,8 @@ variable "task_cpu_architecture" {
 }
 variable "platform_version" {
   type        = string
-  description = "Optional; The ECS backend platform version; Defaults to 1.4.0 so EFS is supported."
-  default     = "1.4.0"
+  description = "Optional; The ECS backend platform version; Defaults to LATEST which is platform version 1.4.0."
+  default     = "LATEST"
 }
 variable "enable_execute_command" {
   type        = bool
