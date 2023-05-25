@@ -1,5 +1,10 @@
 # Changelog
 
+## v9.3.3
+
+* **UPDATE**
+  * Updated the ECS Platform Version to `LATEST`. LATEST uses ECS Platform 1.4.0.
+
 ## v9.3.2
 * **UPDATE**
   * Added the `alb_sticky_cookie_type` variable with default of `lb_cookie` for backwards compatibility.
