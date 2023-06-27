@@ -1,35 +1,61 @@
-# global configuration for all jobs
-# setting tests to only run on pull requests
-name: tests
-on: [pull_request]
+name: 'Integration Tests'
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
 
-# sets the default shell for all jobs
 defaults:
   run:
-    shell: bash
+    shell: 'bash'
 
-# permissions can be set globally for jobs
 permissions:
-  actions: write
-  checks: read
   contents: read
-  pull-requests: read
+  id-token: write
 
 jobs:
-  terraform-format:
-    runs-on: ubuntu-latest
+  format:
+    runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v3
-      - uses: hashicorp/setup-terraform@v1
-      - run: |
+      # checkout the code
+      - name: 'checkout'
+        uses: 'actions/checkout@v3'
+      # if necessary can install a specific version of terraform
+      #- name: 'Install Terraform 1.0.9'
+      #  uses: 'hashicorp/setup-terraform@v2'
+      #  with:
+      #    terraform_version: '1.0.9'
+      # check the terraform formatting
+      - name: 'check formatting'
+        run: |
           terraform fmt -check -recursive
-
-  terraform-validate:
-    runs-on: ubuntu-latest
+  validate:
+    runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v3
-      - uses: hashicorp/setup-terraform@v1
-      - run: |
-          echo "provider \"aws\" { region = \"us-east-1\" } " > tmp_provider.tf
-          terraform init -backend=false -input=false
+      # checkout the code
+      - name: 'checkout'
+        uses: 'actions/checkout@v3'
+      # if necessary can install a specific version of terraform
+      #- name: 'Install Terraform 1.0.9'
+      #  uses: 'hashicorp/setup-terraform@v2'
+      #  with:
+      #    terraform_version: '1.0.9'
+      # validate the module can compile
+      - name: 'validate module'
+        run: |
+          terraform init
           terraform validate
+  spellcheck:
+    runs-on: 'ubuntu-latest'
+    steps:
+      # checkout the code
+      - name: 'checkout'
+        uses: 'actions/checkout@v3'
+      # perform a spellcheck on the markdown
+      # https://github.com/marketplace/actions/github-spellcheck-action
+      - name: 'Spellcheck'
+        uses: 'rojopolis/spellcheck-github-actions@0.33.0'
+        with:
+          source_files: 'CHANGELOG.md CONTRIBUTING.md LICENSE.md README.md'
+          task_name: 'Markdown'
