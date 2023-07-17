@@ -1,5 +1,10 @@
 # Changelog
 
+## v10.0.0
+
+* **UPDATE**
+  * Updated to support Terraform provider `~> 5.0`
+
 ## v9.3.3
 
 * **UPDATE**
