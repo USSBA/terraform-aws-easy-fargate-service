@@ -1,6 +1,10 @@
 module "my-ez-fargate-efs" {
   #source             = "USSBA/easy-fargate-service/aws"
   #version            = "~> 6.0"
+
+  vpc_id             = data.aws_vpc.default.id
+  private_subnet_ids = toset(data.aws_subnets.default.ids)
+
   source         = "../../"
   family         = "ez-fargate-svc-efs"
   task_cpu       = "1024"

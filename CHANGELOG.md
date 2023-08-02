@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+* **FIX**
+  * Fix examples/efs to remove data.aws_subnet_ids, which was removed in TF provider >= 5.0
+* **UPDATE**
+  * Update examples/efs to encrypt EFS drive by default, and to use the same VPC for both EFS and module instantiation
+
 ## v10.0.0
 
 * **UPDATE**
