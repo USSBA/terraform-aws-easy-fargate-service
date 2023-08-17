@@ -1,5 +1,10 @@
 # Changelog
 
+## v10.1.0
+
+* **UPDATE**
+  * Added `log_group_mode` variable with default of `blocking`. Modes supported are `blocking` and `non-blocking`.
+
 ## v10.0.0
 
 * **UPDATE**
