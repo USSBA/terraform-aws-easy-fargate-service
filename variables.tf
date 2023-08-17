@@ -184,6 +184,11 @@ variable "log_group_name" {
   description = "Optional; The name of the log group. By default the `family` variable will be used."
   default     = ""
 }
+variable "log_group_mode" {
+  type        = string
+  description = "Optional; The logging mode for the awslogs logging driver. Default is blocking."
+  default     = "blocking"
+}
 variable "log_group_retention_in_days" {
   type        = number
   description = "Optional; The number of days to retain the log group. By default logs will never expire."
