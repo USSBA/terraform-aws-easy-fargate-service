@@ -42,6 +42,7 @@ locals {
           awslogs-group         = aws_cloudwatch_log_group.fargate.name
           awslogs-region        = var.log_group_region != "" ? var.log_group_region : local.region
           awslogs-stream-prefix = container_definition.name
+          mode                  = var.log_group_mode
         }
       },
       stopTimeout = 5
