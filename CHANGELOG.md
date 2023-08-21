@@ -1,5 +1,10 @@
 # Changelog
 
+## v10.1.1
+* **BUG FIX**
+  * Added a `merge()` to aws log driver `mode`. 
+  * AWS Log Driver mode supports `blocking` and `non-blocking`, however, when defaulting to `blocking` Terraform is throwing the following error `ClientException: The blocking mode specified for log configuration options is invalid`. This will now only set the `mode: "non-blocking" if `var.log_group_mode` is set to `non-blocking`.
+
 ## v10.1.0
 
 * **UPDATE**
