@@ -2,6 +2,11 @@ resource "aws_appautoscaling_target" "ecs_target" {
   depends_on = [
     aws_ecs_service.fargate
   ]
+  lifecycle {
+    ignore_changes = [
+      tags_all, # causing update to resource as tags are not being recorded in state, may need to be removed in the future...
+    ]
+  }
   max_capacity       = var.max_capacity >= 0 ? var.max_capacity : var.desired_capacity
   min_capacity       = var.min_capacity >= 0 ? var.min_capacity : var.desired_capacity
   resource_id        = "service/${var.cluster_name}/${var.family}"
