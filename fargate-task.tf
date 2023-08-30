@@ -2,9 +2,9 @@ locals {
   # Craft the efs_volumes config.  We need one element per "fs_id + directory", and
   # a volume ID that can be referenced from the mountpoints config below
   efs_volumes = distinct([for config in var.efs_configs : {
-    vol_id               = "${config.file_system_id}_${md5(config.root_directory)}"
+    vol_id               = "${config.file_system_id}_${md5(try(config.authorization_config.access_point_id, config.root_directory))}"
     file_system_id       = config.file_system_id
-    root_directory       = config.root_directory
+    root_directory       = try(config.root_directory, null)
     authorization_config = try(config.authorization_config, null)
   }])
 
@@ -13,7 +13,7 @@ locals {
   efs_container_names = distinct(var.efs_configs.*.container_name)
   efs_mountpoints = { for name in local.efs_container_names : name => [for config in var.efs_configs : {
     containerPath = config.container_path
-    sourceVolume  = "${config.file_system_id}_${md5(config.root_directory)}"
+    sourceVolume  = "${config.file_system_id}_${md5(try(config.authorization_config.access_point_id, config.root_directory))}"
     readOnly      = false
   } if config.container_name == name] }
 

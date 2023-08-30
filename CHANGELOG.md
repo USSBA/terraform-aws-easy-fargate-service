@@ -1,5 +1,10 @@
 # Changelog
 
+## v11.0.1
+* **BUG FIX**
+  * Resolved an EFS mount point issue when using an `access_point_id` in the `authorization_confi` instead of the `root_directory` preventing the
+    generated MD5 hash, used for naming the volume, from being unique.
+
 ## v11.0.0
 * **UPDATE**
   * Fixed an issue with the ALB IPv6 ingress security group rule assignments.
