@@ -1,14 +1,31 @@
 # Changelog
 
-## v10.1.2
+## v11.0.0
+* **UPDATE**
+  * Fixed an issue with the ALB IPv6 ingress security group rule assignments.
+  * Adjustments were made to ingress and egress security group rules and are now provisioned as separate resources.
+  * Please use the following script for aide in resolving changes to the state.
 
+<pre>
+FAMILY_NAME='example-service'
+ALB_SGID=`aws ec2 describe-security-groups --query "SecurityGroups[?GroupName == '${FAMILY_NAME}-alb'].GroupId" --output text`
+SVC_SGID=`aws ec2 describe-security-groups --query "SecurityGroups[?GroupName == '${FAMILY_NAME}-svc-sg'].GroupId" --output text`
+terraform import 'module.dsbs.aws_security_group_rule.alb_egress' "${ALB_SGID}_egress_all_0_0_0.0.0.0/0"
+terraform import 'module.dsbs.aws_security_group_rule.fargate_egress' "${SVC_SGID}_egress_all_0_0_0.0.0.0/0"
+# If for some reason you receive the following output after an apply when IPv6 == true.
+# Please import the IPv6 rule because it will have been created during the terraform apply but was never record in the state for some reason.
+#   Error: [WARN] A duplicate Security Group rule was found on (sg-00000000000000000). etc....
+terraform import 'module.dsbs.aws_security_group_rule.alb_egress_ipv6[0]' "${ALB_SGID}_egress_all_0_0_::/0"
+</pre>
+
+## v10.1.2
 * **UPDATE**
   * Removed log mode. Seeing inconsistencies with provider.
 
 ## v10.1.1
 * **BUG FIX**
   * Added a `merge()` to aws log driver `mode`.
-  * AWS Log Driver mode supports `blocking` and `non-blocking`, however, when defaulting to `blocking` Terraform is throwing the following error `ClientException: The blocking mode specified for log configuration options is invalid`. This will now only set the `mode: "non-blocking" if `var.log_group_mode` is set to `non-blocking`.
+  * AWS Log Driver mode supports `blocking` and `non-blocking`, however, when defaulting to `blocking` Terraform is throwing the following error `ClientException: The blocking mode specified for log configuration options is invalid`. This will now only set the `mode: "non-blocking"` if `var.log_group_mode` is set to `non-blocking`.
 
 ## v10.1.0
 
