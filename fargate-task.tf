@@ -38,11 +38,14 @@ locals {
       memory    = floor(var.task_memory / length(local.container_definitions))
       logConfiguration = {
         logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.fargate.name
-          awslogs-region        = var.log_group_region != "" ? var.log_group_region : local.region
-          awslogs-stream-prefix = container_definition.name
-        }
+        options = merge(
+          {
+            awslogs-group         = aws_cloudwatch_log_group.fargate.name
+            awslogs-region        = var.log_group_region != "" ? var.log_group_region : local.region
+            awslogs-stream-prefix = container_definition.name
+          },
+          var.task_log_configuration_options
+        )
       },
       stopTimeout = 5
       mountPoints = concat(

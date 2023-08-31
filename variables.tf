@@ -23,6 +23,11 @@ variable "task_cpu_architecture" {
   description = "Optional; The task CPU architecture."
   default     = ""
 }
+variable "task_log_configuration_options" {
+  type        = any
+  description = "Optional; Used to add or override log configuration options of the ECS task definition."
+  default     = {}
+}
 variable "platform_version" {
   type        = string
   description = "Optional; The ECS backend platform version; Defaults to LATEST which is platform version 1.4.0."
