@@ -47,7 +47,7 @@ Features:
 * `iam_role_permissions_boundary` - Permissions Boundary ARN attached to created IAM roles
 
 ##### Container volume configuration
-* `efs_configs` - List of {file_system_id, root_directory, container_path, container_name} EFS mounts.
+* `efs_configs` - List of EFS configurations, see examples.
 * `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
 
 ##### Deployment and Scaling Configuration

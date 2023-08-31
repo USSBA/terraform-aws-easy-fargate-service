@@ -1,8 +1,7 @@
-module "my-ez-fargate-efs" {
-  #source             = "USSBA/easy-fargate-service/aws"
-  #version            = "~> 6.0"
-  source         = "../../"
-  family         = "ez-fargate-svc-efs"
+# With multiple containers and multiple EFS volumes
+module "example" {
+  #...
+  family         = "example"
   task_cpu       = "1024"
   task_memory    = "2048"
   container_port = 80
@@ -87,18 +86,24 @@ module "my-ez-fargate-efs" {
       container_path = "/mnt/two"
     },
   ]
+  #...
 }
 
-# Allow Fargate task into EFS
-resource "aws_security_group_rule" "allow_fargate_into_efs" {
+resource "aws_security_group_rule" "allow_fargate_into_efs1" {
   type                     = "ingress"
   from_port                = 2049
   to_port                  = 2049
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.efs.id
-  source_security_group_id = module.my-ez-fargate-efs.security_group_id
+  security_group_id        = aws_security_group.efs-one.id
+  source_security_group_id = module.example.security_group_id
 }
 
-output "alb_dns" {
-  value = module.my-ez-fargate-efs.alb_dns
+resource "aws_security_group_rule" "allow_fargate_into_efs2" {
+  type                     = "ingress"
+  from_port                = 2049
+  to_port                  = 2049
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.efs-two.id
+  source_security_group_id = module.example.security_group_id
 }
+
