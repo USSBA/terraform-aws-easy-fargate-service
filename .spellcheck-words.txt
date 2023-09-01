@@ -4,6 +4,7 @@ acm
 ARN
 arns
 autoscaling
+awslogs
 backend
 Balancer
 Balancers

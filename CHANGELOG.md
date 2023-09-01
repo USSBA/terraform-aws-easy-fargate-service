@@ -1,5 +1,13 @@
 # Changelog
 
+## v11.1.1
+* **UPDATE**
+  * Added new variable `task_log_configuration_options` allowing the engineer to add or override task definition log configuration options.
+  * [Using the awslogs log driver](https://docs.aws.amazon.com/AmazonECS/latest/userguide/using_awslogs.html)
+  * Use Case:
+    * Set the logging **mode** to `non-blocking`
+    * Alter the `awslogs-stream-prefix` if the prefix issued by this module is undesirable.
+
 ## v11.0.1
 * **BUG FIX**
   * Resolved an EFS mount point issue when using an `access_point_id` in the `authorization_config` instead of the `root_directory` preventing the
