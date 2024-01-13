@@ -9,7 +9,9 @@ data "aws_iam_policy_document" "ecs_execution_principal" {
   }
 }
 locals {
-  extracted_container_secrets = flatten([for c in local.container_definitions : try(c.secrets, [])])
+  _extracted_container_secrets = flatten([for c in local.container_definitions : try(c.secrets, [])])
+  //strips the secret-name:json-key:version-stage:version-id suffix from the valueFrom field when it's a secret https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-secrets-manager.html
+  extracted_container_secrets = [for secret in local._extracted_container_secrets : length(split(":", secret.valueFrom)) == 10 ? merge(secret, { "valueFrom" : join(":", slice(split(":", secret.valueFrom), 0, 7)) }) : secret]
 }
 data "aws_iam_policy_document" "ecs_execution" {
   statement {
