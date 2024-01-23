@@ -1,5 +1,10 @@
 # Changelog
 
+## v11.1.2
+
+* **UPDATE**
+  * Added new variable `cloudfront_whitelist_forwarded_headers` allowing the engineer to add additional CloudFront headers to the whitelist.
+
 ## v11.1.1
 * **UPDATE**
   * Added new variable `task_log_configuration_options` allowing the engineer to add or override task definition log configuration options.
