@@ -370,7 +370,11 @@ variable "cloudfront_origin_custom_headers" {
   description = "Optional; A custom set of header name/value pairs passed to the ALB from CloudFront. Typically used to pass a secret header to the ALB wich is validated by the regional WAF at the ALB."
   default     = []
 }
-
+variable "cloudfront_whitelist_forwarded_headers" {
+  type        = list(string)
+  description = "Optional; A set of whitelisted headers passed to the ALB from CloudFront."
+  default     = []
+}
 # AWS Shield Protection
 variable "enable_shield_protection" {
   type        = bool

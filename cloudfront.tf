@@ -48,7 +48,7 @@ resource "aws_cloudfront_distribution" "distribution" {
       cookies {
         forward = "all"
       }
-      headers      = ["Host"]
+      headers      = concat(["Host"], var.cloudfront_whitelist_forwarded_headers)
       query_string = true
     }
   }
