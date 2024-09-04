@@ -1,10 +1,8 @@
 name: 'Integration Tests'
 on:
-  push:
+  pull_request:
     branches:
-      - '**'
-    tags-ignore:
-      - '**'
+      - master
 
 defaults:
   run:
