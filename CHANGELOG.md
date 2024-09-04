@@ -1,5 +1,9 @@
 # Changelog
 
+## v11.2.0
+* **UPDATE**
+  * Module will now require Terraform version ~> v1.9 with AWS provider ~> 5.0
+
 ## v11.1.2
 
 * **UPDATE**
