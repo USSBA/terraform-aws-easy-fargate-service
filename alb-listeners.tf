@@ -41,7 +41,7 @@ resource "aws_lb_listener" "https_redirects" {
   load_balancer_arn = aws_lb.alb.arn
   port              = each.value.port
   protocol          = each.value.protocol
-  ssl_policy        = try(each.value.ssl_policy, "ELBSecurityPolicy-TLS-1-2-2017-01")
+  ssl_policy        = each.value.ssl_policy == null ? var.listener_ssl_policy : each.value.ssl_policy
   certificate_arn   = local.certificate_arns[0]
   default_action {
     type = "redirect"
@@ -91,7 +91,7 @@ resource "aws_lb_listener" "https_forwards" {
   load_balancer_arn = aws_lb.alb.arn
   port              = each.value.port
   protocol          = each.value.protocol
-  ssl_policy        = try(each.value.ssl_policy, "ELBSecurityPolicy-TLS-1-2-2017-01")
+  ssl_policy        = each.value.ssl_policy == null ? var.listener_ssl_policy : each.value.ssl_policy
   certificate_arn   = local.certificate_arns[0]
 
   dynamic "default_action" {
