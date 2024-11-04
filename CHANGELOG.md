@@ -1,5 +1,9 @@
 # Changelog
 
+## v11.3.0
+* **UPDATE**
+  * A new variable was added called `listener_ssl_policy` allowing the calling module to assign a default SSL policy of their choosing to HTTPS listeners.
+
 ## v11.2.0
 * **UPDATE**
   * Module will now require Terraform version ~> v1.9 with AWS provider ~> 5.0

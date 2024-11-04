@@ -55,6 +55,11 @@ variable "listeners" {
   description = "Optional; The ALB listener configuration."
   default     = []
 }
+variable "listener_ssl_policy" {
+  type        = string
+  description = "Optional; The SSL policy name given to HTTPS listeners by default."
+  default     = "ELBSecurityPolicy-TLS-1-1-2017-01"
+}
 variable "cloudfront_header" {
   type        = any
   description = "Optional; Custom header associated with CloudFront distribution origin requests. { key = \"header-name\", value = \"header-value\""
