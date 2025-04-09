@@ -35,7 +35,8 @@ resource "aws_security_group_rule" "alb_ingress" {
   from_port         = each.value.port
   to_port           = each.value.port
   protocol          = "tcp"
-  cidr_blocks       = local.is_internal && var.vpc_id != "" ? [data.aws_vpc.other[0].cidr_block] : ["0.0.0.0/0"]
+  #cidr_blocks       = local.is_internal && var.vpc_id != "" ? [data.aws_vpc.other[0].cidr_block] : (var.alb_cidr_ingress != "" ? [var.alb_cidr_ingress] : ["0.0.0.0/0"])
+  cidr_blocks       = local.is_internal ? [var.alb_cidr_ingress] : ["0.0.0.0/0"]
   security_group_id = aws_security_group.alb_ingress.id
   description       = "Allows ingress traffic on port ${each.value.port} to this ALB from anywhere."
 }
