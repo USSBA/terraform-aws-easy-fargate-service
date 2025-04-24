@@ -309,13 +309,11 @@ variable "task_policy_json" {
 }
 variable "security_group_ids" {
   type        = list(string)
-  description = "Optional; A set of additional security group ID's that will associated to the Fargate service network interface."
-  default     = []
+  description = "Required; A set of Security Group IDs to be associated with the Fargate service."
 }
 variable "alb_security_group_ids" {
   type        = list(string)
-  description = "Optional; A set of security group ID's that will associated to the Application Load Balancer.  By default, a security group open to the world is created."
-  default     = []
+  description = "Required; A set of Security Group IDs to be associated with the Application Load-balancer."
 }
 
 # DNS
@@ -370,11 +368,6 @@ variable "tags_ecs_service_enabled" {
   type        = bool
   description = "Optional; Enable/Disable all tags on ECS Service to avoid conflicts with Accounts/Clusters using the old ARN formats.  Defaults to true, adding tags to all ecs services"
   default     = true
-}
-variable "tags_security_group" {
-  type        = map(any)
-  description = "Optional; Map of key-value tags to apply to the security group"
-  default     = {}
 }
 variable "tags_alb" {
   type        = map(any)

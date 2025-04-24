@@ -38,7 +38,7 @@ resource "aws_ecs_service" "fargate" {
 
   network_configuration {
     subnets          = local.private_subnet_ids_provided ? var.private_subnet_ids : local.public_subnet_ids_provided ? var.public_subnet_ids : data.aws_subnets.default[0].ids
-    security_groups  = setunion([aws_security_group.fargate.id], var.security_group_ids)
+    security_groups  = var.security_group_ids
     assign_public_ip = !local.private_subnet_ids_provided
   }
 }

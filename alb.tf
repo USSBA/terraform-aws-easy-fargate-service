@@ -2,7 +2,7 @@ resource "aws_lb" "alb" {
   name               = replace("${var.family}-alb", "_", "-") # Convert underscores to hyphens to support the ALB API
   internal           = local.is_internal
   load_balancer_type = "application"
-  security_groups    = concat(var.alb_security_group_ids, [aws_security_group.alb_ingress.id])
+  security_groups    = var.alb_security_group_ids
   subnets            = local.public_subnet_ids_provided ? var.public_subnet_ids : local.private_subnet_ids_provided ? var.private_subnet_ids : data.aws_subnets.default[0].ids
   ip_address_type    = var.ipv6 ? "dualstack" : "ipv4"
 

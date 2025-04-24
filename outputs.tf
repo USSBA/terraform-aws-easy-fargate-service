@@ -16,6 +16,3 @@ output "alb_dns" {
 output "alb" {
   value = aws_lb.alb
 }
-output "security_group_id" {
-  value = aws_security_group.fargate.id
-}

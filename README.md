@@ -73,8 +73,8 @@ Features:
 * `vpc_id` - The VPC Id in which resources will be provisioned. Default is the default AWS vpc.
 * `private_subnet_ids` - A set if subnet Id's. If configured will be associated with the Fargate service. If not configured and `public_subnet_ids` contains value they will be associated instead. If no public or private subnet Id's are passed to the module then the VPCs default subnets will be used and the ALB will be public-facing.
 * `public_subnet_ids` - A set of subnet Id's. If configured will be associated with the ALB. If not configured and `private_subnet_ids` contains value the ALB will be internal-facing. If no public or private subnet Id's are passed to the module then the VPCs default subnets will be used and the ALB will be public-facing.
-* `security_group_ids` - A set of additional security group ID's that will associated to the Fargate service network interface. Default is `[]`.
-* `alb_security_group_ids` - A set of additional security group ID's that will associated to the ALB.  Configuring these will override the default security group ingress rules.  Default is `[]`.
+* `security_group_ids` - Required; A set of Security Group IDs to be associated with the Fargate service.
+* `alb_security_group_ids` - Required; A set of Security Group IDs to be associated with the Application Load-balancer.
 * `certificate_arn` - A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http.
 * `hosted_zone_id` - The hosted zone ID where the A record will be created. Required if `certificate_arn` is set.
 * `service_fqdn` - Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` is set.
@@ -112,7 +112,6 @@ All tags are optional maps of key-value pairs, and default to empty
 * `tags_ecs` - Tags to apply to all ecs resources
 * `tags_ecs_task_definition` - Tags to apply to the task definition
 * `tags_ecs_service` - Tags to apply to the ECS service
-* `tags_security_group` - Tags to apply to the security groups
 * `tags_alb` - Tags to apply to ALB resources
 * `tags_alb_tg` - Tags to apply to the ALB target group
 * `tags_iam_role` - Tags to apply to the IAM Roles
