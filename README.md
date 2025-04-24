@@ -82,16 +82,8 @@ Features:
 * `alb_log_bucket_name` - The S3 bucket name to store the ALB access logs in.
 * `alb_log_prefix` - Prefix for each object created in ALB access log bucket.
 * `alb_idle_timeout` - Idle Timeout configuration for ALB.  Defaults to 60.  If behind a CloudFront, maximum request time is 60 seconds.  If not behind CloudFront, and your application has long-running requests, you might need to increase this timeout.
-* `use_cloudfront` - When `true` this module will attempt to provision a CF distribution. If a `certificate_arn` is used then both `hosted_zone_id` and `service_fqdn` will be required. Otherwise the default CF certificate is used. Default is `false`
-* `cloudfront_blacklist_geo_restrictions` - A set of alpha-2 country codes. Request originating from these countries will be blocked and all other will be allowed. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
-* `cloudfront_whitelist_geo_restrictions` - A set of alpha-2 country codes. Request originating from these countries will be allowed and all other will be blocked. Must either use `cloudfront_blacklist_geo_restrictions` or `cloudfront_whitelist_geo_restrictions` but not both. By default a blacklist is used but no countries will be blocked.
-* `cloudfront_origin_custom_headers` - A set of custom headers (name/value pairs) that will be passed to the origin. Typically used to pass a secret header and value to an ALB with a WAF to prevent connections directly to the ALB except when this secret header and value are present.
-* `cloudfront_whitelist_forwarded_headers` to allow whitelisting headers through cloudfront to the origin.  Defaults to `[]`.  See [AWS Documentation](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html) for more details.
 * `global_waf_acl` - Global Web Application Firewall ID that will be applied to the CloudFront distribution. For wafv1, provide the WAF ID.  For WAFv2 provide the ARN. By default no association will be made.
 * `regional_waf_acl` - Regional Web Application Firewall identifier.  For wafv1, provide the WAF ID.  For WAFv2 provide the ARN. By default no association will be made.
-  description = "Optional; Regional Web Application Firewall identifier.  For wafv1, provide the WAF ID.  For WAFv2 provide the ARN."
-* `cloudfront_log_bucket_name` - The S3 bucket name to store the CF access logs in. By default no logs will be stored.
-* `cloudfront_log_prefix` - Prefix for each object created in CF access log bucket. By default no prefix will be used.
 * `listeners` - The ALB listener port configuration. By default port 80 will be forwarded unless a certificate is provided then port 80 will redirect to port 443 which will then be forwarded. Here are some [examples](./examples/listener/main.tf) of listener configurations.
 * `listener_ssl_policy` - The SSL policy name given to HTTPS listeners by default.
 * `ipv6` - Boolean to enable ipv6 on the ALB and Route53.  Ensure your VPC is configured to be ipv6 compatible before enabling.  Defaults to `false`.
@@ -123,7 +115,6 @@ All tags are optional maps of key-value pairs, and default to empty
 * `tags_security_group` - Tags to apply to the security groups
 * `tags_alb` - Tags to apply to ALB resources
 * `tags_alb_tg` - Tags to apply to the ALB target group
-* `tags_cloudfront` - Tags to apply to CloudFront
 * `tags_iam_role` - Tags to apply to the IAM Roles
 
 * `tags_ecs_service_enabled` - Enable/Disable all tags on ECS Service to avoid conflicts with Accounts/Clusters using the old ARN formats.  Defaults to true, adding tags to all ecs services
@@ -171,7 +162,6 @@ module "my-ez-fargate-service" {
   certificate_arn    = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-90ab-cdef-1234-567890abcdef"
   hosted_zone_id     = "Z000000000000"
   service_fqdn       = "www.cheeseburger.com"
-  use_cloudfront     = true
   cloudfront_header = {
     key   = "x-header-name"
     value = "12345678-90ab-cdef-1234-567890abcdef"

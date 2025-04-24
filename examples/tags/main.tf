@@ -37,10 +37,6 @@ module "tagged_service" {
     isTargetGroup = "Very Yes"
     foo           = "Written by tags_alb_tg"
   }
-  tags_cloudfront = {
-    isCloudfront = "Very Yes"
-    foo          = "Written by tags_cloudfront"
-  }
   tags_iam_role = {
     isRole = "Very Yes"
     foo    = "Written by tags_iam_role"

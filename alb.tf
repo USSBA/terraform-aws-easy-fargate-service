@@ -19,13 +19,9 @@ resource "aws_lb" "alb" {
   }
   tags = merge(var.tags, var.tags_alb)
 }
-resource "aws_wafregional_web_acl_association" "alb" {
-  count        = local.wafv1_regional ? 1 : 0
-  resource_arn = aws_lb.alb.arn
-  web_acl_id   = local.waf_regional_identifier
-}
+
 resource "aws_wafv2_web_acl_association" "alb" {
-  count        = local.wafv2_regional ? 1 : 0
+  count        = length(var.regional_waf_acl) > 0 ? 1 : 0
   resource_arn = aws_lb.alb.arn
-  web_acl_arn  = local.waf_regional_identifier
+  web_acl_arn  = var.regional_waf_acl
 }

@@ -1,4 +1,4 @@
-# Service
+# ECS
 variable "family" {
   type        = string
   description = "Required; A unique name for the service family; Also used for naming various resources."
@@ -39,6 +39,26 @@ variable "enable_execute_command" {
   default     = false
 }
 
+#
+# WAF+SHIELD
+#
+
+variable "enable_shield_protection" {
+  type        = bool
+  description = "Optional; Enabled AWS Shield Protection targeting the Applicaiton Load-balancer."
+  default     = false
+}
+variable "global_waf_acl" {
+  type        = string
+  description = "Optional; Global Web Application Firewall ID that will be applied to the CloudFront distribution. For wafv1, provide the WAF ID.  For WAFv2 provide the ARN."
+  default     = ""
+}
+variable "regional_waf_acl" {
+  type        = string
+  description = "Optional; Regional Web Application Firewall identifier.  For wafv1, provide the WAF ID.  For WAFv2 provide the ARN."
+  default     = ""
+}
+
 # Application Load Balancer
 variable "alb_idle_timeout" {
   type        = number
@@ -60,9 +80,10 @@ variable "listener_ssl_policy" {
   description = "Optional; The SSL policy name given to HTTPS listeners by default."
   default     = "ELBSecurityPolicy-TLS-1-1-2017-01"
 }
+
 variable "cloudfront_header" {
   type        = any
-  description = "Optional; Custom header associated with CloudFront distribution origin requests. { key = \"header-name\", value = \"header-value\""
+  description = "Optional; Custom header associated with CloudFront distribution origin requests. { key = \"header-name\", value = \"header-value\" }"
   default     = {}
 }
 variable "ipv6" {
@@ -214,16 +235,6 @@ variable "alb_log_prefix" {
   description = "Optional; Prefix for each object created in ALB access log bucket."
   default     = ""
 }
-variable "cloudfront_log_bucket_name" {
-  type        = string
-  description = "Optional: The S3 bucket name in which cloudfront logs will be delivered."
-  default     = ""
-}
-variable "cloudfront_log_prefix" {
-  type        = string
-  description = "Optional; A text prefix prepended to the log file when it is delivered."
-  default     = ""
-}
 
 # Container
 variable "container_port" {
@@ -306,26 +317,6 @@ variable "alb_security_group_ids" {
   description = "Optional; A set of security group ID's that will associated to the Application Load Balancer.  By default, a security group open to the world is created."
   default     = []
 }
-variable "global_waf_acl_id" {
-  type        = string
-  description = "DEPRECATED, use 'global_waf_acl'.  This field will be ignored if global_waf_acl is provided."
-  default     = ""
-}
-variable "global_waf_acl" {
-  type        = string
-  description = "Optional; Global Web Application Firewall ID that will be applied to the CloudFront distribution. For wafv1, provide the WAF ID.  For WAFv2 provide the ARN."
-  default     = ""
-}
-variable "regional_waf_acl_id" {
-  type        = string
-  description = "DEPRECATED, use 'regional_waf_acl'.  This field will be ignored if regional_waf_acl is provided."
-  default     = ""
-}
-variable "regional_waf_acl" {
-  type        = string
-  description = "Optional; Regional Web Application Firewall identifier.  For wafv1, provide the WAF ID.  For WAFv2 provide the ARN."
-  default     = ""
-}
 
 # DNS
 variable "hosted_zone_id" {
@@ -352,39 +343,6 @@ variable "service_fqdn" {
   type        = string
   description = "Optional; Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` is set."
   default     = ""
-}
-
-# CloudFront
-variable "use_cloudfront" {
-  type        = bool
-  description = "Optional; Creates a distribution with a default cache behavior. Default is `false`. If `true` and `service_fqdn` along with `hosted_zone_id` then the ALIAS record will point at this distrobution."
-  default     = false
-}
-variable "cloudfront_blacklist_geo_restrictions" {
-  type        = list(string)
-  description = "Optional; List of alpha-2 country codes that will be blocked, all others will be allowed. Cannot be used with `whiltelist_geo_restrictions`."
-  default     = []
-}
-variable "cloudfront_whitelist_geo_restrictions" {
-  type        = list(string)
-  description = "Optional; List of alpha-2 country codes that will be allowed, all others will be blocked. Cannot be used with `blacklist_geo_restrictions`."
-  default     = []
-}
-variable "cloudfront_origin_custom_headers" {
-  type        = list(object({ name = string, value = string }))
-  description = "Optional; A custom set of header name/value pairs passed to the ALB from CloudFront. Typically used to pass a secret header to the ALB wich is validated by the regional WAF at the ALB."
-  default     = []
-}
-variable "cloudfront_whitelist_forwarded_headers" {
-  type        = list(string)
-  description = "Optional; A set of whitelisted headers passed to the ALB from CloudFront."
-  default     = []
-}
-# AWS Shield Protection
-variable "enable_shield_protection" {
-  type        = bool
-  description = "Optional; Enables WAF shield protection on the Application Load Balancer. Default is false"
-  default     = false
 }
 
 # Tags
@@ -426,11 +384,6 @@ variable "tags_alb" {
 variable "tags_alb_tg" {
   type        = map(any)
   description = "Optional; Map of key-value tags to apply to the Application Load Balancer Target Group"
-  default     = {}
-}
-variable "tags_cloudfront" {
-  type        = map(any)
-  description = "Optional; Map of key-value tags to apply to CloudFront"
   default     = {}
 }
 variable "tags_iam_role" {
