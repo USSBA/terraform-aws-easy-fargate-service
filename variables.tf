@@ -45,7 +45,7 @@ variable "enable_execute_command" {
 
 variable "enable_shield_protection" {
   type        = bool
-  description = "Optional; Enabled AWS Shield Protection targeting the Applicaiton Load-balancer."
+  description = "Optional; Enabled AWS Shield Protection targeting the Application Load-balancer."
   default     = false
 }
 variable "global_waf_acl" {
@@ -287,17 +287,15 @@ variable "nonpersistent_volume_configs" {
 # Networking
 variable "vpc_id" {
   type        = string
-  description = "Optional; The VPC Id in which resources will be provisioned. Default is the default AWS vpc."
-  default     = ""
+  description = "Required; A vpc-id"
 }
 variable "private_subnet_ids" {
   type        = list(string)
-  description = "Optional; A set of subnet ID's that will be associated with the Farage service. By default the module will use the default vpc's public subnets."
-  default     = []
+  description = "Required; A list of subnet-ids; Application load-balancer will be internal unless public_subnet_ids are provided."
 }
 variable "public_subnet_ids" {
   type        = list(string)
-  description = "Optional; A set of subnet ID's that will be associated with the Application Load-balancer. By default the module will use the default vpc's public subnets."
+  description = "Optional; A list of subnet-ids; Application Load-balancer will be public facing."
   default     = []
 }
 

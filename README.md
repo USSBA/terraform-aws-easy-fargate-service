@@ -1,34 +1,13 @@
 # terraform-aws-easy-fargate-service
 
-Do you have a single container web service that needs to be stood up in a hurry? Does your boss need you to deploy this Wordpress site yesterday? We got you covered. With `easy-fargate-service` you can quickly and simply deploy a service using AWS Fargate.
-
-Features:
-
-* Sane Defaults
-* Load balanced out of the box
-* Can optionally provision a CloudFront distribution for your application
-* Configurable scaling
-* Looks up Default VPC/Subnets/etc unless told otherwise
-* Supports EFS and WAF
-* Supports multiple containers
-* Scheduled on/off
-
 ## Usage
-
-### Prerequisites
-
-* VPC and ECS Cluster (AWS default will do!)
-* A docker image
-* An ACM cert (only a prerequisite if you want to run the service over HTTPS)
 
 ### Variables
 
-#### Required
+##### Common
 
 * `family` - A unique name for the service family; Also used for naming various resources.
 * `container_definitions` - List of `{name, image}` at minimum.  If using more than 1 container, must also define `portMappings = [{ containerPort = <port> }]` on the container to be reached by the load balancer.  See [AWS documentation](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) for more the complete list of settings.  See [the examples directory](./examples) for different implementation examples.
-
-#### Optional
 
 ##### Fargate Task and Service Configuration
 
@@ -70,9 +49,9 @@ Features:
 
 ##### Network and Routing Configuration
 
-* `vpc_id` - The VPC Id in which resources will be provisioned. Default is the default AWS vpc.
-* `private_subnet_ids` - A set if subnet Id's. If configured will be associated with the Fargate service. If not configured and `public_subnet_ids` contains value they will be associated instead. If no public or private subnet Id's are passed to the module then the VPCs default subnets will be used and the ALB will be public-facing.
-* `public_subnet_ids` - A set of subnet Id's. If configured will be associated with the ALB. If not configured and `private_subnet_ids` contains value the ALB will be internal-facing. If no public or private subnet Id's are passed to the module then the VPCs default subnets will be used and the ALB will be public-facing.
+* `vpc_id` - Required; A vpc-id.
+* `private_subnet_ids` - Required; A list of subnet-ids; Application load-balancer will be internal unless `public_subnet_ids` are provided.
+* `public_subnet_ids` - Optional; A list of subnet-ids; Application Load-balancer will be public facing.
 * `security_group_ids` - Required; A set of Security Group IDs to be associated with the Fargate service.
 * `alb_security_group_ids` - Required; A set of Security Group IDs to be associated with the Application Load-balancer.
 * `certificate_arn` - A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http.

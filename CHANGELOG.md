@@ -2,8 +2,10 @@
 
 ## v12.0.0
 
-* Support for a CloudFront Distribuiton has been depricated.
-* Support for Classic WAF has been depricated.
+* Support for a CloudFront Distribution has been deprecated.
+* Support for Classic WAF has been deprecated: only WAFv2 associations will be made moving forward.
+* Support for Default VPC and Subnets has been deprecated: values must be provided to the module.
+* Security Groups are no longer provisioned and must be provided to the module.
 
 ## v11.3.0
 
