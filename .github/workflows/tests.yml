@@ -16,40 +16,39 @@ jobs:
   format:
     runs-on: 'ubuntu-latest'
     steps:
-      # checkout the code
       - name: 'checkout'
         uses: 'actions/checkout@v3'
-      # if necessary can install a specific version of terraform
-      #- name: 'Install Terraform 1.0.9'
-      #  uses: 'hashicorp/setup-terraform@v2'
-      #  with:
-      #    terraform_version: '1.0.9'
-      # check the terraform formatting
+
+      - name: 'Install Terraform'
+        uses: 'hashicorp/setup-terraform@v2'
+        with:
+          terraform_version: '1.9.5'
+
       - name: 'check formatting'
         run: |
           terraform fmt -check -recursive
   validate:
     runs-on: 'ubuntu-latest'
     steps:
-      # checkout the code
       - name: 'checkout'
         uses: 'actions/checkout@v3'
-      # if necessary can install a specific version of terraform
-      #- name: 'Install Terraform 1.0.9'
-      #  uses: 'hashicorp/setup-terraform@v2'
-      #  with:
-      #    terraform_version: '1.0.9'
-      # validate the module can compile
+
+      - name: 'Install Terraform'
+        uses: 'hashicorp/setup-terraform@v2'
+        with:
+          terraform_version: '1.9.5'
+
       - name: 'validate module'
         run: |
           terraform init
           terraform validate
+
   spellcheck:
     runs-on: 'ubuntu-latest'
     steps:
-      # checkout the code
       - name: 'checkout'
         uses: 'actions/checkout@v3'
+
       # perform a spellcheck on the markdown
       # https://github.com/marketplace/actions/github-spellcheck-action
       - name: 'Spellcheck'

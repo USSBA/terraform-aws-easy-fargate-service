@@ -17,8 +17,7 @@ locals {
     readOnly      = false
   } if config.container_name == name] }
 
-  nonpersistent_volumes = distinct(var.nonpersistent_volume_configs.*.volume_name)
-
+  nonpersistent_volumes         = distinct(var.nonpersistent_volume_configs.*.volume_name)
   nonpersistent_container_names = distinct(var.nonpersistent_volume_configs.*.container_name)
   nonpersistent_mountpoints = { for name in local.nonpersistent_container_names : name => [for config in var.nonpersistent_volume_configs : {
     containerPath = config.container_path
@@ -27,7 +26,6 @@ locals {
   } if config.container_name == name] }
 
   container_definitions = var.container_definitions
-
   container_definitions_with_defaults = [for container_definition in local.container_definitions : merge(
     # If we are only provided one container, offer a default port of var.container_port
     # Otherwise, the user will need to explicitly define a portMappings property that matched var.container_port
@@ -41,7 +39,7 @@ locals {
         options = merge(
           {
             awslogs-group         = aws_cloudwatch_log_group.fargate.name
-            awslogs-region        = var.log_group_region != "" ? var.log_group_region : local.region
+            awslogs-region        = local.region
             awslogs-stream-prefix = container_definition.name
           },
           var.task_log_configuration_options
@@ -55,6 +53,7 @@ locals {
     },
   container_definition)]
 }
+
 resource "aws_ecs_task_definition" "fargate" {
   family                   = var.family
   container_definitions    = jsonencode(local.container_definitions_with_defaults)
@@ -73,7 +72,6 @@ resource "aws_ecs_task_definition" "fargate" {
       cpu_architecture = var.task_cpu_architecture
     }
   }
-
   dynamic "volume" {
     iterator = volume
     for_each = local.efs_volumes
@@ -93,7 +91,6 @@ resource "aws_ecs_task_definition" "fargate" {
       }
     }
   }
-
   dynamic "volume" {
     iterator = volume
     for_each = local.nonpersistent_volumes

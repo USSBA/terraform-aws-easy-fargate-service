@@ -32,6 +32,7 @@ resource "aws_lb_listener" "http_redirects" {
     }
   }
 }
+
 resource "aws_lb_listener" "https_redirects" {
   # filtering only on redirects where the protocol is HTTPS
   for_each = {
@@ -55,6 +56,7 @@ resource "aws_lb_listener" "https_redirects" {
     }
   }
 }
+
 locals {
   listeners_https_redirects = [
     for redirect in local.listeners : redirect
@@ -63,11 +65,13 @@ locals {
   # Create a map of "redirect_port X additional_cert" objects
   additional_certs_https_redirects = { for pair in setproduct(local.listeners_https_redirects, local.additional_certificate_objs) : "${pair[0].port}_${pair[1].cert_name}" => merge(pair[0], pair[1]) }
 }
+
 resource "aws_lb_listener_certificate" "https_redirects" {
   for_each        = local.additional_certs_https_redirects
   listener_arn    = aws_lb_listener.https_redirects[each.value.port].arn
   certificate_arn = each.value.cert_arn
 }
+
 resource "aws_lb_listener" "http_forwards" {
   # filtering only on forwards where the protocol is HTTP
   for_each = {
@@ -82,6 +86,7 @@ resource "aws_lb_listener" "http_forwards" {
     target_group_arn = aws_lb_target_group.alb.arn
   }
 }
+
 resource "aws_lb_listener" "https_forwards" {
   # filtering only on forwards where the protocol is HTTPS
   for_each = {
@@ -111,17 +116,15 @@ resource "aws_lb_listener" "https_forwards" {
     }
   }
 }
-resource "aws_lb_listener_rule" "http_forward_custom_header" {
-  count = contains(keys(var.cloudfront_header), "key") ? 1 : 0
 
+resource "aws_lb_listener_rule" "http_forward_custom_header" {
+  count        = contains(keys(var.cloudfront_header), "key") ? 1 : 0
   priority     = 1
   listener_arn = aws_lb_listener.https_forwards["443"].arn
-
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb.arn
   }
-
   condition {
     http_header {
       http_header_name = var.cloudfront_header.key
@@ -129,6 +132,7 @@ resource "aws_lb_listener_rule" "http_forward_custom_header" {
     }
   }
 }
+
 locals {
   listeners_https_forwards = [
     for forward in local.listeners : forward
@@ -137,6 +141,7 @@ locals {
   # Create a map of "forward_port X additional_cert" objects
   additional_certs_https_forwards = { for pair in setproduct(local.listeners_https_forwards, local.additional_certificate_objs) : "${pair[0].port}_${pair[1].cert_name}" => merge(pair[0], pair[1]) }
 }
+
 resource "aws_lb_listener_certificate" "https_forwards" {
   for_each        = local.additional_certs_https_forwards
   listener_arn    = aws_lb_listener.https_forwards[each.value.port].arn
