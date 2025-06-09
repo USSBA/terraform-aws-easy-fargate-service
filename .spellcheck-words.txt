@@ -1,6 +1,7 @@
 AAAA
 affirmer
 acm
+acl
 ARN
 arns
 autoscaling
@@ -13,11 +14,13 @@ BUGFIXES
 loadbalancer
 Changelog
 CloudFront
+cloudwatch
 config
 CircleCI
 cidr
 cron
 deregistration
+dns
 durings
 deregistering
 efs
