@@ -1,107 +1,124 @@
 # terraform-aws-easy-fargate-service
 
+This module simplifies deploying containerized applications using AWS Fargate and ECS.
+
+## Features
+
+- AWS Fargate ECS service with task definition
+- Provides support for internal and public-facing Application Load Balancers (ALBs).
+- Health checks and sticky sessions
+- Auto scaling and scheduled scaling
+- CloudWatch logging with configurable retention
+- Optional regional WAF, Shield, and DNS integration
+- Tagging support across all resources
+
+## Prerequisites
+
+To use this module, ensure you have the following:
+
+- **Terraform**: `~> 1.9`
+- **AWS Provider**: `~> 5.0`
+- **AWS Account**: Configured with appropriate permissions to create ECS, ALB, IAM, and related resources
+- **VPC and Subnets**: A pre-existing VPC with private subnets (and optionally public subnets for public-facing ALBs)
+- **Security Groups**: Two pre-existing AWS security groups—one for the ECS tasks (`security_group_ids`) and one for the ALB (`alb_security_group_ids`)
+- **Optional Resources** (if used):
+  - ECS Cluster (If `cluster_name` is not specified, the module uses the AWS-managed default cluster named `"default"`. If this cluster is missing (e.g., deleted or not created), create it with `aws ecs create-cluster --cluster-name default` or specify an existing cluster via `cluster_name`.)
+  - ACM certificates (if `certificate_arns` is provided for HTTPS)
+  - Route53 hosted zone (if `hosted_zone_id` is provided for DNS)
+  - EFS file system (if `efs_configs` is used)
+  - S3 bucket (if `alb_log_bucket_name` is used for ALB logs)
+  - Regional WAF ACL (if `regional_waf_acl` is used)
+
+## Core Inputs
+
+| Name                     | Description                                                                 | Type            | Required |
+|--------------------------|-----------------------------------------------------------------------------|------------------|----------|
+| `family`                | A unique name for the service family. Used for naming ECS and other resources. | `string`         | ✅ Yes    |
+| `container_definitions` | JSON-encoded list of container definitions. Must include `name` and `image`. | `string`         | ✅ Yes    |
+| `vpc_id`                | VPC ID for ECS service networking.                                           | `string`         | ✅ Yes    |
+| `private_subnet_ids`    | List of subnet IDs for the service (ALB will be internal unless public subnets are given). | `list(string)`   | ✅ Yes    |
+| `security_group_ids`    | Security group IDs for the ECS tasks.                                       | `list(string)`   | ✅ Yes    |
+| `alb_security_group_ids`| Security group IDs for the Application Load Balancer.                       | `list(string)`   | ✅ Yes    |
+| `desired_capacity`      | Desired number of ECS tasks. Default: `1`.                                    | `number`         | ❌ No     |
+| `task_cpu`              | Fargate-compliant CPU units. Default: `256`.                                  | `number`         | ❌ No     |
+| `task_memory`           | Fargate-compliant memory value. Default: `512`.                               | `number`         | ❌ No     |
+| `tags`                  | Key-value map of tags applied to all resources. Default: `{}`.                | `map(any)`       | ❌ No     |
+
+## Optional/Advanced Inputs
+
+### Load Balancer
+
+| Name                             | Description                                               | Default         |
+|----------------------------------|-----------------------------------------------------------|-----------------|
+| `alb_idle_timeout`               | ALB idle timeout in seconds.                              | `60`            |
+| `alb_sticky_duration`            | Enables sticky sessions (in seconds).                     | `1`             |
+| `alb_sticky_cookie_type`         | Sticky session cookie type (`lb_cookie` or `app_cookie`). | `lb_cookie`     |  
+| `alb_drop_invalid_header_fields` | Drop invalid HTTP headers.                                | `false`         |
+| `public_subnet_ids`              | Subnet IDs to make ALB public-facing.                     | `[]`            |
+
+### Logging
+
+| Name                            | Description                                   | Default            |
+|---------------------------------|-----------------------------------------------|--------------------|
+| `log_group_name`                | Log group name (defaults to `family` name).     | `""`               |
+| `log_group_retention_in_days`   | CloudWatch log retention in days.             | `0`                |
+| `task_log_configuration_options`| Override log config options.                  | `{}`               |
+
+### Scaling
+
+| Name                        | Description                                   | Default            |
+|-----------------------------|-----------------------------------------------|--------------------|
+| `min_capacity`              | Minimum ECS service capacity.                 | `-1`               |
+| `max_capacity`              | Maximum ECS service capacity.                 | `-1`               |
+| `scaling_metric`            | Auto scaling metric (`cpu` or `memory`).      | `""`               |
+| `scaling_threshold`         | Threshold % to trigger scaling.               | `-1`               |
+| `scheduled_actions`         | List of scheduled scaling actions.            | `[]`               |
+| `scheduled_actions_timezone`| Timezone for scheduled scaling.               | `"UTC"`            |
+
+### WAF & Shield
+
+| Name                       | Description                                 | Default |
+|----------------------------|---------------------------------------------|---------|
+| `enable_shield_protection` | Enables AWS Shield protection for ALB.      | `false` |
+| `regional_waf_acl`         | ARN of an existing regional WAFv2 Web ACL to associate with the Application Load Balancer (ALB). | `""`    |
+
+**NOTE:** Setting `enable_shield_protection = true` will attempt to enable [AWS Shield Advanced](https://aws.amazon.com/shield/) protection on the Application Load Balancer (ALB) created by this module.
+
+This does not automatically enroll your AWS account in Shield Advanced. Your account **must already be enrolled** in Shield Advanced for this setting to take effect.
+
+**IMPORTANT:** AWS Shield Advanced incurs a **$3,000/month/account** charge, regardless of how many resources are protected. Be sure you understand the pricing and have completed the necessary enrollment steps before enabling this option.
+
+### DNS/HTTPS
+
+| Name                     |Description                                                                          | Default |
+|--------------------------|-------------------------------------------------------------------------------------|---------|
+| `hosted_zone_id`         | ID of an existing Route 53 hosted zone. Required to create a DNS record.            | `""`    |
+| `service_fqdn`           | Domain name for the service; used with `hosted_zone_id` to create a Route 53 record.| `""`    |
+| `certificate_arns`       | One or more ACM certificate ARNs to enable HTTPS on the ALB.                        | `[]`    |
+| `route53_allow_overwrite`| Allow overwrite of existing Route53 records.                                        | `false` |
+
+## Outputs
+
+| Name                    | Description                                            |
+|-------------------------|--------------------------------------------------------|
+| `task_definition`       | The ECS task definition object.                        |
+| `service`               | The ECS service object.                                |
+| `task_role`             | The IAM role used by the ECS tasks.                    |
+| `alb_dns`               | The DNS name of the Application Load Balancer.         |
+| `alb`                   | The Application Load Balancer object.                  |
+
+## Notes
+
+- For a full list of inputs, see [module inputs](https://registry.terraform.io/modules/USSBA/easy-fargate-service/aws/latest?tab=inputs).
+- This module assumes IAM permissions and VPC networking is already set up.
+- This module supports both public and internal ALBs. User must provide `public_subnet_ids` in order for ALB to be public facing.
+- This module does not create a CloudFront distribution but supports integration with an existing one by using `cloudfront_header` to secure ALB access with a custom header, blocking unauthorized requests without the header. Configure the header in your CloudFront distribution’s origin settings and use the `alb_dns` output as the origin.
+
 ## Usage
-
-### Variables
-
-##### Common
-
-* `family` - A unique name for the service family; Also used for naming various resources.
-* `container_definitions` - List of `{name, image}` at minimum.  If using more than 1 container, must also define `portMappings = [{ containerPort = <port> }]` on the container to be reached by the load balancer.  See [AWS documentation](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) for more the complete list of settings.  See [the examples directory](./examples) for different implementation examples.
-
-##### Fargate Task and Service Configuration
-
-* `cluster_name` - The name of the ECS cluster where the Fargate service will run. Default is the default AWS cluster.
-* `enable_execute_command` - Enable executing command inside a container running in Fargate service. Default is false.
-* `log_group_name` - The name of the log group. By default the `family` variable will be used.
-* `log_group_retention_in_days` - The number of days to retain the log group. By default logs will never expire.
-* `log_group_region` - The region where the log group exists. By default the current region will be used.
-* `task_cpu` - How much CPU should be reserved for the container (in aws cpu-units). Default is `256`.
-* `task_memory` - How much Memory should be reserved for the container (in MB). Default is `512`.
-* `task_cpu_architecture` - The task CPU architecture (e.g. `X86_64`, `ARM64`); Only supported on platform version `1.4.0`.
-* `container_port` - Port the container listens on. Default is `80` (only valid with single container configurations, if using more then one container the port will need to be defined with your container definitions).
-* `platform_version` - The ECS backend platform version; Defaults to `1.4.0` so EFS is supported.
-* `task_policy_json` - A JSON formatted IAM policy providing the running container with permissions.  By default, no permissions granted.
-* `iam_role_path` - Path attached to created IAM roles
-* `iam_role_permissions_boundary` - Permissions Boundary ARN attached to created IAM roles
-
-##### Container volume configuration
-* `efs_configs` - List of EFS configurations, see examples.
-* `nonpersistent_volume_configs` - List of {volume_name, container_name, container_path} non-persistent volumes
-
-##### Deployment and Scaling Configuration
-* `desired_capacity` - The desired number of containers running in the service. Default is `1`.
-* `max_capacity` - The maximum number of containers running in the service. Default is same as `desired_capacity`.
-* `min_capacity` - The minimum number of containers running in the service. Default is same as `desired_capacity`.
-* `scaling_metric` - A type of target scaling. Needs to be either `cpu` or `memory`. Default is no scaling.
-* `scaling_threshold` - The percentage in which the scaling metric will trigger a scaling event. Default is no scaling.
-* `health_check_path` - A relative path for the services health checker to hit. Default is `/`.
-* `health_check_healthy_threshold` - The number of consecutive health checks successes required before considering an unhealthy target healthy. Defaults to 10.
-* `health_check_unhealthy_threshold` - The number of consecutive health check failures required before considering the target unhealthy. Defaults to 10.
-* `health_check_timeout` - The amount of time, in seconds, during which no response means a failed health check. Defaults to 2.
-* `health_check_interval` - The approximate amount of time, in seconds, between health checks of an individual target. Defaults to 30.
-* `health_check_matcher` - The HTTP codes to use when checking for a successful response from a target. Defaults to `200-399`.
-* `deregistration_delay` - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from draining to unused. The range is 0-3600 seconds. The default value is 20 seconds.
-* `deployment_maximum_percent` - Upper limit on the number of running tasks that can be during a deployment. Default is 200.
-* `deployment_minimum_healthy_percent` - Lower limit percentage of tasks that must be reporting healthy during a deployment. Default is 100.
-* `enable_deployment_rollbacks` - Turn on rollbacks for deployments.  This means that if a deployment fails, it will roll back to the previous version.  Defaults to `false`, but `true` is the recommended setting for production environments.
-* `wait_for_steady_state` - Configure terraform to wait for ECS service to be deployed and stable before terraform finishes.  Note that Fargate deployments can take a remarkably long time to reach a steady state, and thus your terraform deployment times will increase by a few minutes.  Defaults to `false`, but `true` is recommended for production environments.
-
-##### Network and Routing Configuration
-
-* `vpc_id` - Required; A vpc-id.
-* `private_subnet_ids` - Required; A list of subnet-ids; Application load-balancer will be internal unless `public_subnet_ids` are provided.
-* `public_subnet_ids` - Optional; A list of subnet-ids; Application Load-balancer will be public facing.
-* `security_group_ids` - Required; A set of Security Group IDs to be associated with the Fargate service.
-* `alb_security_group_ids` - Required; A set of Security Group IDs to be associated with the Application Load-balancer.
-* `certificate_arn` - A certificate ARN being managed via ACM. If provided we will redirect 80 to 443 and serve on 443/https. Otherwise traffic will be served on 80/http.
-* `hosted_zone_id` - The hosted zone ID where the A record will be created. Required if `certificate_arn` is set.
-* `service_fqdn` - Fully qualified domain name (www.example.com) you wish to use for your service. Must be valid against the ACM cert provided. Required if `certificate_arn` is set.
-* `route53_allow_overwrite` - Set the `allow_overwrite` property of the route53 record.  If `true`, there will be no `terraform import` necessary for pre-existing records. Default is `false`.
-* `alb_log_bucket_name` - The S3 bucket name to store the ALB access logs in.
-* `alb_log_prefix` - Prefix for each object created in ALB access log bucket.
-* `alb_idle_timeout` - Idle Timeout configuration for ALB.  Defaults to 60.  If behind a CloudFront, maximum request time is 60 seconds.  If not behind CloudFront, and your application has long-running requests, you might need to increase this timeout.
-* `global_waf_acl` - Global Web Application Firewall ID that will be applied to the CloudFront distribution. For wafv1, provide the WAF ID.  For WAFv2 provide the ARN. By default no association will be made.
-* `regional_waf_acl` - Regional Web Application Firewall identifier.  For wafv1, provide the WAF ID.  For WAFv2 provide the ARN. By default no association will be made.
-* `listeners` - The ALB listener port configuration. By default port 80 will be forwarded unless a certificate is provided then port 80 will redirect to port 443 which will then be forwarded. Here are some [examples](./examples/listener/main.tf) of listener configurations.
-* `listener_ssl_policy` - The SSL policy name given to HTTPS listeners by default.
-* `ipv6` - Boolean to enable ipv6 on the ALB and Route53.  Ensure your VPC is configured to be ipv6 compatible before enabling.  Defaults to `false`.
-* `alb_sticky_duration` - By default, sticky sessions are disabled. Once a number value is provided, sticky sessions are enabled, and the provided number is used to determine sticky session's duration in seconds.
-* `alb_sticky_cookie_type` - By default a cookie type of `lb_cookie` will be used. Only `lb_cookie` and `app_cookie` are supported.
-* `alb_sticky_cookie_name` - Applicable only when `app_cookie` is configured. The sticky session cookie domain name used when the `app_cookie` type is used.
-* `alb_drop_invalid_header_fields` - Optional; Indicates whether HTTP headers with header fields that are not valid are removed by the load balancer (true) or routed to targets (false). The default is false. Elastic Load Balancing requires that message header names contain only alphanumeric characters and hyphens. Only valid for Load Balancers of type application.
-
-##### Lights On/Off
-
-* `lights_on_schedule_expr` - Expression that will trigger an event to restore max/min capacity back to configured settings.  Defaults to `""`.  See [Application AutoScaling Schedule](https://docs.aws.amazon.com/autoscaling/application/APIReference/API_ScheduledAction.html#API_ScheduledAction_Contents) for details.
-* `lights_off_schedule_expr` - Expression that will trigger an event to set max/min capacity to zero.  Defaults to `""`. See [Application AutoScaling Schedule](https://docs.aws.amazon.com/autoscaling/application/APIReference/API_ScheduledAction.html#API_ScheduledAction_Contents) for details
-* `schedule_timezone` - IANA Timezone in which to base `at` and `cron` schedule expressions.  Defaults to `"UTC"`. See [Time Zone List](https://www.joda.org/joda-time/timezones.html)
-
-##### Shield Advanced Protection
-
-**NOTE:** This setting does not `enroll` your account into shield advanced and that is a requirement to use this feature! Please do your due diligence before enabling shield advanced for your account or organization as it costs $3000 / per month
-
-* `enable_shield_protection` - Optional; Enables shield advanced protection on the Application Load Balancer. Default is false
-
-##### Tagging
-
-All tags are optional maps of key-value pairs, and default to empty
-
-* `tags` - Tags to apply to all resources
-* `tags_ecs` - Tags to apply to all ecs resources
-* `tags_ecs_task_definition` - Tags to apply to the task definition
-* `tags_ecs_service` - Tags to apply to the ECS service
-* `tags_alb` - Tags to apply to ALB resources
-* `tags_alb_tg` - Tags to apply to the ALB target group
-* `tags_iam_role` - Tags to apply to the IAM Roles
-
-* `tags_ecs_service_enabled` - Enable/Disable all tags on ECS Service to avoid conflicts with Accounts/Clusters using the old ARN formats.  Defaults to true, adding tags to all ecs services
-
-## Examples
 
 ### Working examples
 
-See the [examples directory](./examples) for some working terraform examples using different features
+See the [examples directory](./examples) for some working terraform examples using different features.
 
 ### Simple Example
 
@@ -137,7 +154,7 @@ module "my-ez-fargate-service" {
   vpc_id             = "vpc-1234abcd"
   private_subnet_ids = ["subnet-11111111", "subnet-22222222", "subnet-33333333"]
   public_subnet_ids  = ["subnet-44444444", "subnet-55555555", "subnet-66666666"]
-  certificate_arn    = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-90ab-cdef-1234-567890abcdef"
+  certificate_arns   = ["arn:aws:acm:us-east-1:123456789012:certificate/12345678-90ab-cdef-1234-567890abcdef"]
   hosted_zone_id     = "Z000000000000"
   service_fqdn       = "www.cheeseburger.com"
   cloudfront_header = {
@@ -161,14 +178,9 @@ module "my-ez-fargate-service" {
 
 ## Contributing
 
-We welcome contributions.
-To contribute please read our [CONTRIBUTING](CONTRIBUTING.md) document.
+We welcome contributions. To contribute please read our [CONTRIBUTING](CONTRIBUTING.md) document.
 
 All contributions are subject to the license and in no way imply compensation for contributions.
-
-### Terraform 0.12
-
-Our code base now exists in Terraform 0.13 and we are halting new features in the Terraform 0.12 major version.  If you wish to make a PR or merge upstream changes back into 0.12, please submit a PR to the `terraform-0.12` branch.
 
 ## Code of Conduct
 
@@ -176,8 +188,8 @@ We strive for a welcoming and inclusive environment for all SBA projects.
 
 Please follow this guidelines in all interactions:
 
-* Be Respectful: use welcoming and inclusive language.
-* Assume best intentions: seek to understand other's opinions.
+- Be Respectful: use welcoming and inclusive language.
+- Assume best intentions: seek to understand other's opinions.
 
 ## Security Policy
 
