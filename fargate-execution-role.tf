@@ -40,6 +40,16 @@ data "aws_iam_policy_document" "ecs_execution" {
       resources = local.extracted_container_secrets.*.valueFrom
     }
   }
+  # Custom policy statement for additional application-specific resources, e.g. KMS
+  dynamic "statement" {
+    count = var.exec_role_extra_permissions ? ["enabled"] : []
+    content {
+      sid    = "AdditionalAppServices"
+      effect = "Allow"
+      actions = var.exec_role_extra_permissions 
+      resources = var.exec_role_extra_arns 
+    }
+  }
 }
 resource "aws_iam_role" "ecs_execution" {
   name               = "${var.family}-exec-basic"

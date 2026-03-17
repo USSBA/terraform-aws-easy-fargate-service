@@ -337,6 +337,18 @@ variable "iam_role_permissions_boundary" {
   default     = null
 }
 
+variable "var.exec_role_extra_permissions" {
+  type        = list(string)
+  description = "Optional; List of additional permissions to grant ECS task execution role. Used to access additional services required by the application."
+  default     = []
+}
+
+variable "var.exec_role_extra_arns" {
+  type        = list(string)
+  description = "Optional; Restrict additional IAM permissions for ECS execution role to acting on this List of ARNs."
+  default     = []
+}
+
 # WAF and Shield
 variable "enable_shield_protection" {
   type        = bool
