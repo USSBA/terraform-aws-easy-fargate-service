@@ -32,8 +32,6 @@ locals {
     length(local.container_definitions) == 1 ? { portMappings = [{ containerPort = var.container_port }] } : {},
     {
       essential = true
-      cpu       = floor(var.task_cpu / length(local.container_definitions))
-      memory    = floor(var.task_memory / length(local.container_definitions))
       logConfiguration = {
         logDriver = "awslogs"
         options = merge(
