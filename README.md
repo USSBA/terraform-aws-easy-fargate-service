@@ -1,5 +1,3 @@
-**This repository has been archived and is no longer maintained.**
-
 # terraform-aws-easy-fargate-service
 
 This module simplifies deploying containerized applications using AWS Fargate and ECS.
