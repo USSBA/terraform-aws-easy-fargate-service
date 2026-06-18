@@ -5,23 +5,28 @@ variable "family" {
 }
 
 variable "container_definitions" {
-  description = "Required; Container configuration as a JSON-encoded list of maps. Must include 'name' and 'image'. Other fields will use defaults or be overridden."
+  type        = any
+  description = "Required; Container configuration as a list of maps. Must include 'name' and 'image'. Other fields will use defaults or be overridden."
+
   validation {
-    condition     = can(var.container_definitions.*.name)
+    condition     = length(var.container_definitions) > 0
+    error_message = "VALIDATION FAILURE: Variable container_definitions must contain at least one container definition."
+  }
+
+  validation {
+    condition = alltrue([
+      for container_definition in var.container_definitions : can(container_definition.name)
+    ])
     error_message = "VALIDATION FAILURE: Every element of container_definitions must include a 'name' field."
   }
+
   validation {
-    condition     = can(var.container_definitions.*.image)
+    condition = alltrue([
+      for container_definition in var.container_definitions : can(container_definition.image)
+    ])
     error_message = "VALIDATION FAILURE: Every element of container_definitions must include an 'image' field."
   }
-  validation {
-    condition     = can(var.container_definitions[0])
-    error_message = "VALIDATION FAILURE: Variable container_definitions must be a list."
-  }
-  validation {
-    condition     = can(var.container_definitions[0])
-    error_message = "VALIDATION FAILURE: Variable container_definitions must be a list."
-  }
+
   validation {
     error_message = "VALIDATION FAILURE: Variable container_definitions.*.portMappings must all be unique."
     condition     = length(distinct([for def in var.container_definitions : def.portMappings[0].containerPort if can(def.portMappings[0].containerPort)])) == length([for def in var.container_definitions : def.portMappings[0].containerPort if can(def.portMappings[0].containerPort)])
@@ -116,6 +121,7 @@ variable "scheduled_actions" {
       max_capacity = number
     })
   )
+
   description = "Optional; A list of scheduled actions [{expression = :string, min_capacity = :int, max_capacity = :int},...]; Expressions: [at(yyyy-mm-ddThh:mm:ss), rate(:value :unit), or cron(:minutes :hours :dayOfMonth :month :dayOfWeek :year)]; Default is []"
   default     = []
 }
@@ -314,6 +320,7 @@ variable "nonpersistent_volume_configs" {
     container_name = string
     container_path = string
   }))
+
   description = "Optional; List of non-persistent volumes in format: {volume_name, container_name, container_path}."
   default     = []
 }
@@ -321,7 +328,13 @@ variable "nonpersistent_volume_configs" {
 # IAM/Security
 variable "task_policy_json" {
   type        = string
-  description = "Optional; JSON-formatted IAM policy granting permissions to the running container. Defaults to no permissions."
+  description = "Optional; JSON-formatted IAM policy granting additional permissions to the ECS task role. Defaults to no additional permissions."
+  default     = ""
+}
+
+variable "execution_policy_json" {
+  type        = string
+  description = "Optional; JSON-formatted IAM policy granting additional permissions to the ECS task execution role. Defaults to no additional permissions."
   default     = ""
 }
 
